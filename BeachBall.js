@@ -6,11 +6,11 @@ BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean'
 BeachBall.resetCaged = 0;
 
 //Version Information
-BeachBall.version = '5.2.0.5';
-BeachBall.SCBversion = '3.4121'; //Last SandCastle Builder version tested
+BeachBall.version = '5.3.0';
+BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio info here, although audio has been removed. Maybe in the future it can be readded, so the code can stay.
-// NOTE: To re-enable audio, uncomment it in BeachBall.AllOptions in BeachBall.LoadSettings
+// NOTE: To re-enable audio, uncomment 'AudioAlert' comments
 //BB Audio Alerts Variables
 BeachBall.audio_Bell = new Audio("http://xenko.comxa.com/Ship_Bell.mp3");
 	BeachBall.audio_Bell.volume = 1;
@@ -760,10 +760,10 @@ BeachBall.Ninja = function() {
         }
 	}
     else if (BeachBall.Time_to_ONG <= 15) {
-        if (BeachBall.incoming_ONG == 0 && BeachBall.Settings['AudioAlerts'].status > 2) {
+        /*if (BeachBall.incoming_ONG == 0 && BeachBall.Settings['AudioAlerts'].status > 2) {
 			BeachBall.audio_Chime.play();
 			BeachBall.incoming_ONG = 1;
-        }  
+        } */
     }
 }
 
@@ -814,6 +814,7 @@ BeachBall.RedundaKitty = function() {
 			$('#redacteditem').css("border","2px solid red");
 		}
 		
+		/*
 		//If RK Audio Alert Enabled, Play Alert
 		if (BeachBall.Settings['AudioAlerts'].status == 1 || BeachBall.Settings['AudioAlerts'].status == 4){
 			BeachBall.PlayRKAlert();
@@ -821,7 +822,7 @@ BeachBall.RedundaKitty = function() {
 		// If LC Audio Alert Enabled and LC is available, Play Alert
 		else if (BeachBall.Settings['AudioAlerts'].status == 2 && Molpy.Redacted.DrawType[Molpy.Redacted.DrawType.length-1] == 'hide2') {
 			BeachBall.PlayRKAlert();
-		}
+		}*/
 	}
 	
 	//If no RK active, update title Timer. Reset audio alert variable.
