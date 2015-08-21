@@ -1155,7 +1155,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'minSetting'){return 500;}
 		if (key == 'maxSetting'){return Molpy.NPlength;}
 		if (key == 'msg')		{return 'Please enter your desired refresh rate in milliseconds (500 - 3600):';}
-		if (key == 'desc')		{return [BeachBall.Settings[option].setting];}
+		if (key == 'desc')		{return ['<a onclick="BeachBall.SwitchSetting(\'RefreshRate\')">' + BeachBall.Settings[option].setting + ' ms</a>'];}
 	}
 	else if (option == 'RKAutoClick') {
 		if (key == 'title')		{return 'Redundakitty AutoClick';}
