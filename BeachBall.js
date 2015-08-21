@@ -3,7 +3,7 @@ var BeachBall = {};
 BeachBall.incoming_ONG = 0;
 BeachBall.Time_to_ONG = 1800000;
 BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean', 'ceil', 'drac', 'stuff', 'land', 
-//dimen,varie, //need to be slotted in on the update. Commented out for obvious reasons
+//dimen,varie, //v4.0 addition: need to be slotted in on the update. Commented out for obvious reasons
 'prize', 'discov', 'monums', 'monumg', 'tagged', 'badgesav'];
 BeachBall.resetCaged = 0;
 
@@ -785,7 +785,7 @@ BeachBall.PlayRKAlert = function() {
 BeachBall.RedundaKitty = function() {
 	var meRK = BeachBall.Settings['RKAutoClick'];
 	var meLC = BeachBall.Settings['LCSolver'];
-	var meKnight=BeachBall.Settins['KnightActions']
+	var meKnight = BeachBall.Settings['KnightActions'];
     BeachBall.RKTimer = Molpy.Redacted.toggle - Molpy.Redacted.countup;
 	//If there is an active RK
 	if (Molpy.Redacted.location > 0) {
@@ -793,35 +793,33 @@ BeachBall.RedundaKitty = function() {
 		document.title = "! kitten !";
 		BeachBall.RKLevel = Molpy.Redacted.location - 1;
 		
-		//If RKAutoClick is Selected
-		if (meRK.status == 2) {
-			//If it is a Logicat, Solve and Submit
-			if (Molpy.PuzzleGens["redacted"].active) {
-				BeachBall.SolveLogic("redacted");
-			} else if(Molpy.Redacted.drawType[0]=='knight'){
-				if(!meKnight){
-				} else if(meKnight==1){
-					Molpy.DragonKnightAttack()
-				} else if(meKnight==2){
-					Molpy.DragonKnightAttack(1)
-				} else if(meKnight==3){
-					Molpy.DragonKnightAttack(2)
-				} else {
-					Molpy.DragonsHide(0)
-				}
-			}
-			//Otherwise, click the Redundakitty 
-			else {
-				Molpy.Redacted.onClick(BeachBall.RKLevel);
+		//If RKAutoClick is Selected, not a logicat, and not a knight
+		if (meRK.status == 2 && !Molpy.PuzzleGens["redacted"].active && Molpy.Redacted.drawType[0] != 'knight') {
+			//Click the Redundakitty
+			Molpy.Redacted.onClick(BeachBall.RKLevel);
+		}
+		
+		//Solve Logicats
+		else if (Molpy.PuzzleGens["redacted"].active && meLC.status == 1) {
+			BeachBall.SolveLogic("redacted");
+		}
+		
+		//Fight Knights
+		else if (Molpy.Redacted.drawType[0]=='knight' && meKnight.status > 0) {
+			if (meKnight.status == 1) {
+				Molpy.DragonKnightAttack();
+			} else if (meKnight.status == 2) {
+				Molpy.DragonKnightAttack(1);
+			} else if (meKnight.status == 3) {
+				Molpy.DragonKnightAttack(2);
+			} else if (meKnight.status == 4) {
+				Molpy.DragonsHide(0);
 			}
 		}
+		
 		//Otherwise if Find RK is selected, find the RK
 		else if (meRK.status == 1) {
 			BeachBall.FindRK();
-		}
-		
-		else if (meLC.status == 1) {
-			BeachBall.SolveLogic("redacted");
 		}
 		
 		//If the RK is visible, then highlight it
@@ -1187,9 +1185,9 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'desc')		{return ['Off', 'Find RK', 'On'];}
 	}
 	else if (option == 'KnightActions') {
-		if (key == 'title')		{return 'Knight Actions';}
+		if (key == 'title')		{return 'Knight AutoClick';}
 		if (key == 'status') 	{return 0;}
-		if (key == 'maxStatus') {return 1;}
+		if (key == 'maxStatus') {return 4;}
 		if (key == 'setting')	{return 0;}
 		if (key == 'desc')		{return ['Off', 'Attack', 'Strength', 'Breath', 'Hide'];}
 	}
@@ -1225,7 +1223,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 
 BeachBall.LoadSettings = function() {
 	BeachBall.AllOptions = [/*'AudioAlerts', */'BeachAutoClick', 'NinjaMode', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
-	                        'RKAutoClick', 'ToolFactory', 'RiftAutoClick', "ClearLog"];
+	                        'RKAutoClick', 'KnightActions', 'ToolFactory', 'RiftAutoClick', "ClearLog"];
 	BeachBall.AllOptionsKeys = ['title', 'status', 'maxStatus', 'setting', 'minSetting', 'maxSetting', 'msg', 'desc'];
 	BeachBall.SavedOptionsKeys = ['status', 'setting'];
 	BeachBall.Settings = {};
