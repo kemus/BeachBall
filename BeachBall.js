@@ -6,7 +6,7 @@ BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean'
 BeachBall.resetCaged = 0;
 
 //Version Information
-BeachBall.version = '5.3.0';
+BeachBall.version = '5.3.1';
 BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio info here, although audio has been removed. Maybe in the future it can be readded, so the code can stay.
@@ -732,39 +732,40 @@ BeachBall.GetBeachState = function () {
 }
 
 BeachBall.Ninja = function() {
-    //Molpy.ninjad is 0 when you can't click, and stays 0 until you extend streak, when it turns to 1
+    	//Molpy.ninjad is 0 when you can't click, and stays 0 until you extend streak, when it turns to 1
 	//Molpy.npbONG is 0 when you can't click, and 1 when you can click
 
 	if (Molpy.ninjad == 0) {
-		if ((BeachBall.Settings['BeachAutoClick'].status == 3) && (Molpy.Got('Temporal Rift') == 0)) {
+		if ((BeachBall.Settings['NinjaMode'].status == 1) && (Molpy.Got('Temporal Rift') == 0)) {
 			Molpy.ClickBeach();
 			Molpy.Notify('Ninja Ritual Auto Click', 1);
 		}
-        if (Molpy.npbONG != 0) {
-            BeachBall.incoming_ONG = 0;
-            if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 0) {
-				Molpy.ClickBeach();
-				Molpy.Notify('Ninja Auto Click', 1);
-				if (BeachBall.resetCaged == 1) {
-					BeachBall.Settings['CagedAutoClick'].status = 1;
-					BeachBall.resetCaged = 0;
-				}
-			}
-			/*If the Caged Logicats are essentially infinite in number (thus Temporal Rift is always active)
-			 *the autoclicker needs to be paused to allow temporal rift to end to process the click, then resumed*/
-			else if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 1 && BeachBall.Settings['CagedAutoClick'].status == 1) {
-				//Turn Off Caged AutoClicker, and set variable to reset it after click.
-				BeachBall.Settings['CagedAutoClick'].status = 0;
-				BeachBall.resetCaged = 1;
-			}
-        }
+                if (Molpy.npbONG != 0) {
+            	        BeachBall.incoming_ONG = 0;
+            	        if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 0) {
+			        Molpy.ClickBeach();
+			        Molpy.Notify('Ninja Auto Click', 1);
+			        if (BeachBall.resetCaged == 1) {
+			        	BeachBall.Settings['CagedAutoClick'].status = 1;
+			        	BeachBall.resetCaged = 0;
+			        }
+		        }
+		        /*If the Caged Logicats are essentially infinite in number (thus Temporal Rift is always active)
+		         *the autoclicker needs to be paused to allow temporal rift to end to process the click, then resumed*/
+		        else if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 1 && BeachBall.Settings['CagedAutoClick'].status == 1) {
+		        	//Turn Off Caged AutoClicker, and set variable to reset it after click.
+		        	BeachBall.Settings['CagedAutoClick'].status = 0;
+		        	BeachBall.resetCaged = 1;
+	        	}
+                }
 	}
-    else if (BeachBall.Time_to_ONG <= 15) {
-        /*if (BeachBall.incoming_ONG == 0 && BeachBall.Settings['AudioAlerts'].status > 2) {
+	/*
+	else if (BeachBall.Time_to_ONG <= 15) {
+        	if (BeachBall.incoming_ONG == 0 && BeachBall.Settings['AudioAlerts'].status > 2) {
 			BeachBall.audio_Chime.play();
 			BeachBall.incoming_ONG = 1;
-        } */
-    }
+        	}
+    	} */
 }
 
 BeachBall.PlayRKAlert = function() {
@@ -1118,12 +1119,19 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 	else if (option == 'BeachAutoClick') {
 		if (key == 'title')		{return 'Beach AutoClick';}
 		if (key == 'status') 	{return 1;}
-		if (key == 'maxStatus') {return 3;}
+		if (key == 'maxStatus') {return 2;}
 		if (key == 'setting')	{return 1;}
 		if (key == 'minSetting'){return 1;}
 		if (key == 'maxSetting'){return 20;}
 		if (key == 'msg')		{return 'Please enter your desired clicking rate per second (1 - 20):';}
-		if (key == 'desc')		{return ['Off', 'Keep Ninja', 'On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a>','On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a><br/>(with ninja ritual)'];}
+		if (key == 'desc')		{return ['Off', 'Click once per NP', 'On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a>'];}
+	}
+	else if (option == 'NinjaMode') {
+		if (key == 'title')		{return 'NPB Ninja Mode';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1;}
+		if (key == 'setting')	{return 0;}
+		if (key == 'desc')		{return ['Ninja Stealth<br/>(Requires Beach AutoClick)', 'Ninja Ritual<br/>(Requires Beach AutoClick)'];}
 	}
 	else if (option == 'CagedAutoClick') {
 		if (key == 'title')		{return 'Caged Logicat AutoClick';}
@@ -1155,7 +1163,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'minSetting'){return 500;}
 		if (key == 'maxSetting'){return Molpy.NPlength;}
 		if (key == 'msg')		{return 'Please enter your desired refresh rate in milliseconds (500 - 3600):';}
-		if (key == 'desc')		{return [BeachBall.Settings[option].setting];}
+		if (key == 'desc')		{return ['<a onclick="BeachBall.SwitchSetting(\'RefreshRate\')">' + BeachBall.Settings[option].setting + ' ms</a>'];}
 	}
 	else if (option == 'RKAutoClick') {
 		if (key == 'title')		{return 'Redundakitty AutoClick';}
@@ -1195,7 +1203,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 }
 
 BeachBall.LoadSettings = function() {
-	BeachBall.AllOptions = [/*'AudioAlerts', */'BeachAutoClick', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
+	BeachBall.AllOptions = [/*'AudioAlerts', */'BeachAutoClick', 'NinjaMode', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
 	                        'RKAutoClick', 'ToolFactory', 'RiftAutoClick', "ClearLog"];
 	BeachBall.AllOptionsKeys = ['title', 'status', 'maxStatus', 'setting', 'minSetting', 'maxSetting', 'msg', 'desc'];
 	BeachBall.SavedOptionsKeys = ['status', 'setting'];
@@ -1209,6 +1217,13 @@ BeachBall.LoadSettings = function() {
 		if (typeof localStorage['BB.LCSolver.status'] == 'string') {
 			localStorage.removeItem('BB.LCSolver.status');
 		}*/
+	}
+	
+	// NinjaMode Update (>v5.3.0)
+	// Old options conversion
+	if (BeachBall.storage == 1 && localStorage['BB.BeachAutoClick.status'] == 3) {
+	        localStorage['BB.BeachAutoClick.status'] = 2;
+	        localStorage['BB.NinjaMode.status'] = 1;
 	}
 
 	for (i = 0; i < BeachBall.AllOptions.length; i++) {

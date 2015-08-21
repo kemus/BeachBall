@@ -4,13 +4,14 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 
 ## Features
 
-* Kitties have a timer on top of the screen, to tell you when there is a kitty.
-* You can activate Autoclick on kitties, or just an auto-focus on the kitty.
-* You can add autoclick on the picture (1 click for keeping ninja, or multiple click per second)
-* Logicats can be solved automatically.
-* Tool factory can be loaded faster.
-* Caged logicat can be automated to solve every logicat one by one, the max at once for QQ, or get bonemeal.
-* ~~You can put audio alerts on common events~~ Audio alerts are currently non-functional.
+* Beach Autoclicking: Can be set to click the NewPix, just once per NP (to keep up Stealth/Ritual) or x times per second. Can be toggled between keeping Ninja Stealth or Ninja Ritual.
+* Kitties: Kitties have a timer on top of the screen, to tell you when there is a kitty. Can be set to autoclick kitties, or to auto-focus on the kitty.
+* Logicats: Can be set to solve automatically. Caged logicats can automated, solving one by one, the maximum at once for QQ, or to get bonemeal.
+* Monty Haul: Can be set to auto-puchase and solve, either attempting for the 'prize' or the goat.
+* Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG.
+* Tool Factory: The TF can be loaded faster (does not require TF Load Letter).
+
+(Audio alerts are currently non-functional.)
 
 ## How to use this script ?
 
@@ -23,6 +24,12 @@ B. If you do NOT have one of those addons, copy the contents of BeachBall_Bookma
 Once loaded, go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
 
 ## Changelog
+
+###Version 5.3.1
+
+####Changes
+* Ninja Ritual has been split from Beach AutoClick. Beach Autoclick has only 3 modes again: Off, Click once per NP, CPS. There is a new option: NPB Ninja Mode, which can be set to either Ninja Stealth or Ninja Ritual. Now you can toggle your autoclicker when the NPB timer is counting down! Players who previously used CPS (ritual) will have their mode initially set to Ritual, everyone else will be initally set to Stealth. (As a side note, this change means you should be able to ritual without clicking once a second and without Herder.)
+* Refresh Rate is now changable. Set it lower to have BeachBall execute commands (such as kitties) faster, or set it higher to slow the addon down.
 
 ###Version 5.3.0
 
