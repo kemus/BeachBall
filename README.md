@@ -24,6 +24,12 @@ Once loaded, go in the Option panel of the game, and you will find every option 
 
 ## Changelog
 
+###Version 5.3.1
+
+####Changes
+* Ninja Ritual has been split from Beach AutoClick. Beach Autoclick has only 3 modes again: Off, Click once per NP, CPS. There is a new option: NPB Ninja Mode, which can be set to either Ninja Stealth or Ninja Ritual. Now you can toggle your autoclicker when the NPB timer is counting down! Players who previously used CPS (ritual) will have their mode initially set to Ritual, everyone else will be initally set to Stealth. (As a side note, this change means you should be able to ritual without clicking once a second and without Herder.)
+* Refresh Rate is now changable. Set it lower to have BeachBall execute commands (such as kitties) faster, or set it higher to slow the addon down.
+
 ###Version 5.3.0
 
 ####Changes
