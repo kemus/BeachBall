@@ -1218,6 +1218,13 @@ BeachBall.LoadSettings = function() {
 			localStorage.removeItem('BB.LCSolver.status');
 		}*/
 	}
+	
+	// NinjaMode Update (>v5.3.0)
+	// Old options conversion
+	if (BeachBall.storage == 1 && localStorage['BB.BeachAutoClick.status'] == 3) {
+	        localStorage['BB.BeachAutoClick.status'] = 2;
+	        localStorage['BB.NinjaMode.status'] = 1;
+	}
 
 	for (i = 0; i < BeachBall.AllOptions.length; i++) {
 		var option = BeachBall.AllOptions[i];
@@ -1227,25 +1234,9 @@ BeachBall.LoadSettings = function() {
 			//Molpy.Notify('Option: ' + option + ' Key: ' + key, 1);
 			if (BeachBall.storage == 1 && localStorage['BB.'+ option + '.' + key]) {
 				BeachBall.Settings[option][key] = localStorage['BB.'+ option + '.' + key];
-				
-				// NinjaMode Update (>v5.3.0)
-				// Old options conversion
-				if (option == 'BeachAutoClick') {
-				        if (key == 'status' && BeachBall.Settings[option][key] == 3) {
-				                BeachBall.Settings[option][key] = 2;
-				        } else if (key != "setting") {
-				                BeachBall.Settings[option][key] = BeachBall.LoadDefaultSetting(option, key);
-				        }
-				}
 			}
 			else {
 				BeachBall.Settings[option][key] = BeachBall.LoadDefaultSetting(option, key);
-				
-				// NinjaMode Update (>v5.3.0)
-				// Old options conversion
-				if (option == 'NinjaMode' && key == "status" && BeachBall.storage == 1 && localStorage['BB.BeachAutoClick.status'] == 3) {
-				        BeachBall.Settings[option][key] = 1;
-				}
 			}
 		}
 	}	
