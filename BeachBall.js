@@ -736,7 +736,7 @@ BeachBall.Ninja = function() {
 	//Molpy.npbONG is 0 when you can't click, and 1 when you can click
 
 	if (Molpy.ninjad == 0) {
-		if ((BeachBall.Settings['NinjaMode'].status == 1) && (Molpy.Got('Temporal Rift') == 0)) {
+		if ((BeachBall.Settings['NinjaMode'].status == 1 && BeachBall.Settings['BeachAutoClick'].status > 0) && (Molpy.Got('Temporal Rift') == 0)) {
 			Molpy.ClickBeach();
 			Molpy.Notify('Ninja Ritual Auto Click', 1);
 		}
@@ -1131,7 +1131,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 1;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Ninja Stealth<br/>(Requires Beach AutoClick)', 'Ninja Ritual<br/>(Requires Beach AutoClick)'];}
+		if (key == 'desc')		{return ['Ninja Stealth<br/>Requires Beach AutoClick', 'Ninja Ritual<br/>Requires Beach AutoClick<br/>or Ninja Herder'];}
 	}
 	else if (option == 'CagedAutoClick') {
 		if (key == 'title')		{return 'Caged Logicat AutoClick';}
