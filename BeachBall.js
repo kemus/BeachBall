@@ -2,7 +2,9 @@
 var BeachBall = {};
 BeachBall.incoming_ONG = 0;
 BeachBall.Time_to_ONG = 1800000;
-BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean', 'ceil', 'drac', 'stuff', 'land', 'prize', 'discov', 'monums', 'monumg', 'tagged', 'badgesav'];
+BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean', 'ceil', 'drac', 'stuff', 'land', 
+//dimen,varie, //need to be slotted in on the update. Commented out for obvious reasons
+'prize', 'discov', 'monums', 'monumg', 'tagged', 'badgesav'];
 BeachBall.resetCaged = 0;
 
 //Version Information
@@ -783,6 +785,7 @@ BeachBall.PlayRKAlert = function() {
 BeachBall.RedundaKitty = function() {
 	var meRK = BeachBall.Settings['RKAutoClick'];
 	var meLC = BeachBall.Settings['LCSolver'];
+	var meKnight=BeachBall.Settins['KnightActions']
     BeachBall.RKTimer = Molpy.Redacted.toggle - Molpy.Redacted.countup;
 	//If there is an active RK
 	if (Molpy.Redacted.location > 0) {
@@ -795,6 +798,17 @@ BeachBall.RedundaKitty = function() {
 			//If it is a Logicat, Solve and Submit
 			if (Molpy.PuzzleGens["redacted"].active) {
 				BeachBall.SolveLogic("redacted");
+			} else if(Molpy.Redacted.drawType[0]=='knight'){
+				if(!meKnight){
+				} else if(meKnight==1){
+					Molpy.DragonKnightAttack()
+				} else if(meKnight==2){
+					Molpy.DragonKnightAttack(1)
+				} else if(meKnight==3){
+					Molpy.DragonKnightAttack(2)
+				} else {
+					Molpy.DragonsHide(0)
+				}
 			}
 			//Otherwise, click the Redundakitty 
 			else {
@@ -1171,6 +1185,13 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'maxStatus') {return 2;}
 		if (key == 'setting')	{return 0;}
 		if (key == 'desc')		{return ['Off', 'Find RK', 'On'];}
+	}
+	else if (option == 'KnightActions') {
+		if (key == 'title')		{return 'Knight Actions';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1;}
+		if (key == 'setting')	{return 0;}
+		if (key == 'desc')		{return ['Off', 'Attack', 'Strength', 'Breath', 'Hide'];}
 	}
 	else if (option == 'ToolFactory') {
 		if (key == 'title')		{return 'Tool Factory';}
