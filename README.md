@@ -5,7 +5,7 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 ## Features
 
 * Beach Autoclicking: Can be set to click the NewPix, just once per NP (to keep up Stealth/Ritual) or x times per second. Can be toggled between keeping Ninja Stealth or Ninja Ritual.
-* Kitties: Kitties have a timer on top of the screen, to tell you when there is a kitty. Can be set to autoclick kitties, or to auto-focus on the kitty.
+* Kitties: Kitties have a timer on top of the screen, to tell you when there is a kitty. Can be set to autoclick kitties, or to auto-focus on the kitty. Can also fight Knights.
 * Logicats: Can be set to solve automatically. Caged logicats can automated, solving one by one, the maximum at once for QQ, or to get bonemeal.
 * Monty Haul: Can be set to auto-puchase and solve, either attempting for the 'prize' or the goat.
 * Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG.
@@ -30,6 +30,14 @@ This feature is performed using the Faves panel instead of the Options panel.
 * To disable (or view) a Faves autoclicker, select the boost in the Faves panel and toggle 'Visible' on. On the visible Fave boost, there should be a timer adjacent to the category label (looks like '[ 1s ]'). Click this timer to disable the boost autoclicker.
 
 ## Changelog
+
+###Version 5.3.2
+
+####Features
+* Knight Autoclicker is now its own feature! For all your Attack/Hide needs. Keep in mind, with the next game update soon, this feature is a touch rough around the edges (just like Knights themselves).
+
+####Changes
+* Kitty Autoclicker no longer overwrites either Knight or Logicat autoclickers.
 
 ###Version 5.3.1.1
 
