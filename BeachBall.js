@@ -1157,7 +1157,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 1;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off<br/>Game bug with logicats<br/>Solver \'fixes\' bug if on.', 'On'];}
+		if (key == 'desc')		{return ['Off<br/>Game bug with logicats<br/>Solver avoids bug if On', 'On'];}
 	}
 	
 	else if (option == 'MHAutoClick') {
