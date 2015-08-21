@@ -31,6 +31,12 @@ This feature is performed using the Faves panel instead of the Options panel.
 
 ## Changelog
 
+###Version 5.3.1.1
+
+####Bug Fixes
+* No longer unintentionally clicking 1/NP if Ninja Mode:Ritual and Beach Autoclicker:Off.
+* Fixed highly unlikely edge case if you constantly spawn Temporal Rifts (via tons of single Logicats, for example) in Ninja Ritual with Autoclicker on, where you could miss extending the ritual and then possibly click for stealth.
+
 ###Version 5.3.1
 
 ####Changes
