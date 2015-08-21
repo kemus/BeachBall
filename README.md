@@ -14,7 +14,7 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 
 ## How to use this script ?
 
-Start by installing this script (http://codeRitter.github.io/BeachBall/) using one of two methods:
+Start by installing this script (http://github.com/codeRitter/BeachBall) using one of two methods:
 
 A. If you have Greasemonkey (for Firefox) or Tampermonkey (for Chrome), install BeachBall_Monkey_Loader.js (instuctions for using Xmonkey can be found elsewhere). The BeachBall addon will automatically load 5 seconds after loading the game page (you must reload the game page once after installing - don't forget to save).
 
