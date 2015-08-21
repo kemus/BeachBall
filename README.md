@@ -10,6 +10,7 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 * Monty Haul: Can be set to auto-puchase and solve, either attempting for the 'prize' or the goat.
 * Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG.
 * Tool Factory: The TF can be loaded faster (does not require TF Load Letter).
+* Faves Autoclicker: Using the Faves panel, any boost can be set up with an autoclick timer. (An example use would be to autoclick Question Qubes.)
 
 (Audio alerts are currently non-functional.)
 
@@ -22,6 +23,11 @@ A. If you have Greasemonkey (for Firefox) or Tampermonkey (for Chrome), install 
 B. If you do NOT have one of those addons, copy the contents of BeachBall_Bookmark_Loader.js into a bookmark (paste onto the link/location/destination, and not the description or name). You will need to click your bookmark once to get the BeachBall addon to load - EVERY time you reload the game page, you must reclick the bookmark loader.
 
 Once loaded, go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
+
+####Special Feature: Faves Autoclicker
+This feature is performed using the Faves panel instead of the Options panel.
+* To set an autoclicker for a boost, open the Faves panel and select the desired boost (if the boost is not already in the dropdown selection, use the 'Choose' button to make a new fave). With the boost selection, click 'AutoClick' and follow the directions on the popup to set the timer. The timer frequency can be changed later using the same process.
+* To disable (or view) a Faves autoclicker, select the boost in the Faves panel and toggle 'Visible' on. On the visible Fave boost, there should be a timer adjacent to the category label (looks like '[ 1s ]'). Click this timer to disable the boost autoclicker.
 
 ## Changelog
 
