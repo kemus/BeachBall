@@ -1254,7 +1254,7 @@ BeachBall.SwitchSetting = function(option) {
 			localStorage['BB.'+ option + '.setting'] = me.setting;
 		}
 		me.desc = BeachBall.LoadDefaultSetting(option, 'desc');
-		BeachBall.DisplayDescription(option, me.setting);
+		BeachBall.DisplayDescription(option);
 	}
 }
 
