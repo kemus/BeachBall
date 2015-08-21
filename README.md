@@ -24,6 +24,15 @@ Once loaded, go in the Option panel of the game, and you will find every option 
 
 ## Changelog
 
+###Version 5.3.0
+
+####Changes
+* Audio (which didn't work) has been removed.
+
+####Fixes
+* ONG Rift logic (to account for Aleph One and cracks).
+* 'Cristal' is no longer a word.
+
 ###Version 5.2.0.5
 
 ####New Features
