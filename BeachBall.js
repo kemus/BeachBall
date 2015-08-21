@@ -8,7 +8,7 @@ BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean'
 BeachBall.resetCaged = 0;
 
 //Version Information
-BeachBall.version = '5.3.1.1';
+BeachBall.version = '5.3.2';
 BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio info here, although audio has been removed. Maybe in the future it can be readded, so the code can stay.
@@ -1189,7 +1189,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 4;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off', 'Attack', 'Strength', 'Breath', 'Hide'];}
+		if (key == 'desc')		{return ['Off', 'Attack', 'Strength Potion', 'Breath<br/>(Placeholder)', 'Hide'];}
 	}
 	else if (option == 'ToolFactory') {
 		if (key == 'title')		{return 'Tool Factory';}
