@@ -9,6 +9,8 @@ BeachBall.resetCaged = 0;
 BeachBall.version = '5.2.0.5';
 BeachBall.SCBversion = '3.4121'; //Last SandCastle Builder version tested
 
+// NOTE: Tons of audio info here, although audio has been removed. Maybe in the future it can be readded, so the code can stay.
+// NOTE: To re-enable audio, uncomment it in BeachBall.AllOptions in BeachBall.LoadSettings
 //BB Audio Alerts Variables
 BeachBall.audio_Bell = new Audio("http://xenko.comxa.com/Ship_Bell.mp3");
 	BeachBall.audio_Bell.volume = 1;
@@ -694,26 +696,25 @@ BeachBall.RiftAutoClick = function () {
 		case 1 : // farm crystals
 
 			if (!(Molpy.Boosts['Flux Harvest'] && Molpy.Boosts['Flux Harvest'].bought)) {
-                if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
-                    return;
-
-                if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
-                    Molpy.RiftJump();
-                break;
-            } else { // when flux harvest is owned and ready use it to farm quickly
-                if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power )) {
-                    return;
-                }
-                if (Molpy.Boosts['Time Lord'].power > 0) {
-                    Molpy.FluxHarvest();
-                }
-                break;
-            }
+                                if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
+                                        return;
+                                if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
+                                        Molpy.RiftJump();
+                                break;
+                        } else { // when flux harvest is owned and ready use it to farm quickly
+                                if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power )) {
+                                        return;
+                                }
+                                if (Molpy.Boosts['Time Lord'].power > 0) {
+                                        Molpy.FluxHarvest();
+                                }
+                                break;
+                        }
 			
 		case 2 : // rift to ONG
 			if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
 				return;
-			if (Molpy.Got('Temporal Rift') && Molpy.Boosts['Sand'].Has(1) && (BeachBall.GetBeachState() == 'beachsafe')) // ninja click has passed, rift occuring, sand in stock
+			if (Molpy.Got('Temporal Rift') && (Molpy.Boosts['Sand'].Has(1) || Molpy.Boosts['Sand'].Spend(1,1)) && (BeachBall.GetBeachState() == 'beachsafe')) // ninja click has passed, rift occuring, sand in stock
 				Molpy.RiftJump();
 			break;
 	}
@@ -1177,7 +1178,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 2;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off', 'On - Flux Cristal', 'On - ONG'];}
+		if (key == 'desc')		{return ['Off', 'On - Flux Crystal', 'On - ONG'];}
 	}
 	else if (option == 'ClearLog') {
 		if (key == 'title')		{return 'Log Pruning';}
@@ -1193,7 +1194,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 }
 
 BeachBall.LoadSettings = function() {
-	BeachBall.AllOptions = ['AudioAlerts', 'BeachAutoClick', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
+	BeachBall.AllOptions = [/*'AudioAlerts', */'BeachAutoClick', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
 	                        'RKAutoClick', 'ToolFactory', 'RiftAutoClick', "ClearLog"];
 	BeachBall.AllOptionsKeys = ['title', 'status', 'maxStatus', 'setting', 'minSetting', 'maxSetting', 'msg', 'desc'];
 	BeachBall.SavedOptionsKeys = ['status', 'setting'];
