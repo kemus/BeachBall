@@ -3,19 +3,28 @@
 ## Features
 
 * Kitties have a timer on top of the screen, to tell you when there is a kitty.
-* you can activate Autoclick on kitties, or just an auto-focus on the kitty
-* You can put audio alerts on common events
+* You can activate Autoclick on kitties, or just an auto-focus on the kitty.
 * You can add autoclick on the picture (1 click for keeping ninja, or multiple click per second)
-* Logicats can be solved automaticaly
-* Tool factory can be loaded faster
+* Logicats can be solved automatically.
+* Tool factory can be loaded faster.
 * Caged logicat can be automated to solve every logicat one by one, the max at once for QQ, or get bonemeal.
+* ~~You can put audio alerts on common events~~ Audio alerts are currently non-functional.
 
 ## How to use this script ?
 
-Start by installing this script (instructions here : http://xenko.github.io/BeachBall/)
+Start by installing this script (instructions here : http://codeRitter.github.io/BeachBall/)
 Go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
 
 ## Changelog
+
+###Version 5.2.0.5
+
+####New Features
+* Flux Harvest will now be used to harvest flux if it is available.
+* NEW: Clear log option. Clears the in-game log to reduce lag.
+
+####Bug Fixes/Improvements
+* Improvements to logicat, including max solve fix.
 
 ###Version 5.2.0
 
