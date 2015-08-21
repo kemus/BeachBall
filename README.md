@@ -1,5 +1,7 @@
 # BeachBall
 
+Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.html).
+
 ## Features
 
 * Kitties have a timer on top of the screen, to tell you when there is a kitty.
@@ -12,8 +14,13 @@
 
 ## How to use this script ?
 
-Start by installing this script (instructions here : http://codeRitter.github.io/BeachBall/)
-Go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
+Start by installing this script (http://codeRitter.github.io/BeachBall/) using one of two methods:
+
+A. If you have Greasemonkey (for Firefox) or Tampermonkey (for Chrome), install BeachBall_Monkey_Loader.js (instuctions for using Xmonkey can be found elsewhere). The BeachBall addon will automatically load 5 seconds after loading the game page (you must reload the game page once after installing - don't forget to save).
+
+B. If you do NOT have one of those addons, copy the contents of BeachBall_Bookmark_Loader.js into a bookmark (paste onto the link/location/destination, and not the description or name). You will need to click your bookmark once to get the BeachBall addon to load - EVERY time you reload the game page, you must reclick the bookmark loader.
+
+Once loaded, go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
 
 ## Changelog
 
