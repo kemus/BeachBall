@@ -879,9 +879,9 @@ BeachBall.ClearLog = function() {
 
 BeachBall.Pope = function() {
 	if (BeachBall.popeGrace > 0) {
-		BeachBall.popGrace -= BeachBall.Settings['RefreshRate'].setting / 1000;
-	} else if (!Molpy.Decree) {
-		var decName = BeachBall.decreeNames[BeachBall.Settings['ClearLog'].status - 1];
+		BeachBall.popeGrace -= BeachBall.Settings['RefreshRate'].setting / 1000;
+	} else if (!Molpy.Decree && BeachBall.Settings['ThePope'].status > 0) {
+		var decName = BeachBall.decreeNames[BeachBall.Settings['ThePope'].status - 1];
 		var decree = Molpy.PapalDecrees[decName];
 		if (decree.avail()) {
 			Molpy.SelectPapalDecree(decName);
