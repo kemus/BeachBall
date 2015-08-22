@@ -10,6 +10,7 @@ BeachBall.decreeNames = [];
 for (var decree in Molpy.PapalDecrees) {
 	BeachBall.decreeNames.push(decree);
 }
+BeachBall.popeGrace = 0;
 
 //Version Information
 BeachBall.version = '5.3.2';
@@ -876,6 +877,18 @@ BeachBall.ClearLog = function() {
     }
 }
 
+BeachBall.Pope = function() {
+	if (BeachBall.popeGrace > 0) {
+		BeachBall.popGrace -= BeachBall.Settings['RefreshRate'].setting / 1000;
+	} else if (!Molpy.Decree) {
+		var decName = BeachBall.decreeNames[BeachBall.Settings['ClearLog'].status - 1];
+		var decree = Molpy.PapalDecrees[decName];
+		if (decree.avail()) {
+			Molpy.SelectPapalDecree(decName);
+		}
+	}
+}
+
 BeachBall.FavsAutoclick = {};
 
 BeachBall.ChooseAutoclick = function () {
@@ -1307,12 +1320,18 @@ BeachBall.SwitchSetting = function(option) {
 
 BeachBall.SwitchStatus = function(option) {
 	var me = BeachBall.Settings[option];
-		me.status++;
-		if (me.status > me.maxStatus) {
-			me.status = 0;
-		}
-		if (option == 'ToolFactory')
-			BeachBall.LoadToolFactory();
+	me.status++;
+	if (me.status > me.maxStatus) {
+		me.status = 0;
+	}
+	if (option == 'ToolFactory') {
+		BeachBall.LoadToolFactory();
+	}
+	
+	// The Pope grace period
+	if (option == 'ThePope') {
+		BeachBall.popeGrace = me.setting;
+	}
 		
 	/*if ((option == 'RKAutoClick' && me.status == 2) || (option == 'CagedAutoClick' && me.status == 1)) {
 		BeachBall.Settings['LCSolver'].status = 1;
@@ -1350,6 +1369,7 @@ BeachBall.SpyRefresh = function () {
 function BeachBallMainProgram() {
 	//Molpy.Notify('Tick', 0);
 	BeachBall.Time_to_ONG = Molpy.NPlength - Molpy.ONGelapsed/1000;
+	BeachBall.Pope();
 	BeachBall.Ninja();
 	BeachBall.RedundaKitty();
 	BeachBall.CagedAutoClick();
