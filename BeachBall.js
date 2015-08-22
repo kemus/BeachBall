@@ -6,6 +6,10 @@ BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean'
 //dimen,varie, //v4.0 addition: need to be slotted in on the update. Commented out for obvious reasons
 'prize', 'discov', 'monums', 'monumg', 'tagged', 'badgesav'];
 BeachBall.resetCaged = 0;
+BeachBall.decreeNames = [];
+for (var decree in Molpy.PapalDecrees) {
+	BeachBall.decreeNames.push(decree);
+}
 
 //Version Information
 BeachBall.version = '5.3.2';
@@ -1215,6 +1219,30 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'setting')	{return 0;}
 		if (key == 'desc')		{return ['Off', 'On'];}
 	}
+	else if (option == 'ThePope') {
+		if (key == 'title')		{return 'The Pope';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1 + BeachBall.decreeNames.length;}
+		if (key == 'setting')	{return 5;}
+		if (key == 'minSetting'){return 0;}
+		if (key == 'maxSetting'){return 30;}
+		if (key == 'msg')		{return 'Please enter your desired grace time for The Pope (0 - 30) seconds:';}
+		if (key == 'desc') {
+			var popeDescList = ['None<br/>Switch grace time: <a onclick="BeachBall.SwitchSetting(\'ThePope\')">' + BeachBall.Settings[option].setting + ' sec</a>'];
+			for (i = 0; i < BeachBall.decreeNames.length; i++) {
+				var decree = Molpy.PapalDecrees[BeachBall.decreeNames[i]];
+				var mod = decree.value > 1 ? (( decree.value*Molpy.PapalBoostFactor -1)*100) : 
+							     ((1-decree.value/Molpy.PapalBoostFactor)*100);
+				var desc = decree.desc.replace(/XX/,mod.toFixed(2));
+				if (!decree.avail()) {
+					desc = '<del>' + desc + '</del>';
+				}
+				desc = (i+1) + "/" + BeachBall.decreeNames.length + "<br/>" + desc;
+				popeDescList.push(desc);
+			}
+			return popeDescList;
+		}
+	}
 	else {
 		Molpy.Notify(BeachBall.Settings[option] + ' setting not found. Please contact developer.', 1);
 		return -1;
@@ -1223,7 +1251,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 
 BeachBall.LoadSettings = function() {
 	BeachBall.AllOptions = [/*'AudioAlerts', */'BeachAutoClick', 'NinjaMode', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
-	                        'RKAutoClick', 'KnightActions', 'ToolFactory', 'RiftAutoClick', "ClearLog"];
+	                        'RKAutoClick', 'KnightActions', 'ToolFactory', 'RiftAutoClick', 'ThePope', "ClearLog"];
 	BeachBall.AllOptionsKeys = ['title', 'status', 'maxStatus', 'setting', 'minSetting', 'maxSetting', 'msg', 'desc'];
 	BeachBall.SavedOptionsKeys = ['status', 'setting'];
 	BeachBall.Settings = {};
