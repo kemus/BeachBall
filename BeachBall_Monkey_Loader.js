@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Beachball Loader
 // @namespace    http://github.com/codeRitter/BeachBall
-// @version      1.0
+// @version      1.1
 // @description  Beachball autoloader for Sandcastle Builder.
 // @author       codeRitter
 // @match        http://castle.chirpingmustard.com/castle.html
+// @match        http://castle.chirpingmustard.com/classic.html
 // @grant        none
 // ==/UserScript==
 
