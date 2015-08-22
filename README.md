@@ -8,7 +8,7 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 * Kitties: Kitties have a timer on top of the screen, to tell you when there is a kitty. Can be set to autoclick kitties, or to auto-focus on the kitty. Can also fight Knights.
 * Logicats: Can be set to solve automatically. Caged logicats can automated, solving one by one, the maximum at once for QQ, or to get bonemeal.
 * Monty Haul: Can be set to auto-puchase and solve, either attempting for the 'prize' or the goat.
-* Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG.
+* Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG (including optional return with Now Where Was I?).
 * The Pope Selector: Can be set to automatically select a specific Pope Decree when available. Switching has a grace period before the selection is chosen, so feel free to browse (the default grace period is 5seconds).
 * Tool Factory: The TF can be loaded faster (does not require TF Load Letter).
 * Faves Autoclicker: Using the Faves panel, any boost can be set up with an autoclick timer. (An example use would be to autoclick Question Qubes.)
@@ -31,6 +31,15 @@ This feature is performed using the Faves panel instead of the Options panel.
 * To disable (or view) a Faves autoclicker, select the boost in the Faves panel and toggle 'Visible' on. On the visible Fave boost, there should be a timer adjacent to the category label (looks like '[ 1s ]'). Click this timer to disable the boost autoclicker.
 
 ## Changelog
+
+###Version 5.4.1
+
+####Features
+* New setting for Rift Autoclik available: On - ONG + Now Where Was I? After running out of Time Lord uses on this setting, it uses Now Where Was I? to return to your highest NewPix.
+
+####Fixes
+* Cleaned Rift logic and code.
+* New Rift situation coded for: if you are on Ninja Ritual Mode and own Ninja Herder, then Rift - ONG will use the rift regardless of the state of the NPBs (since entering the rift will cause ritual). This specifically targets the edge case where you use Rift - ONG but don't use the autoclicker, but it should help a few other rare cases/times as well.
 
 ###Version 5.4.0
 
