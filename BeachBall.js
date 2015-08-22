@@ -13,7 +13,7 @@ for (var decree in Molpy.PapalDecrees) {
 BeachBall.popeGrace = 0;
 
 //Version Information
-BeachBall.version = '5.4.0';
+BeachBall.version = '5.4.1';
 BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio info here, although audio has been removed. Maybe in the future it can be readded, so the code can stay.
@@ -695,36 +695,47 @@ BeachBall.ClickBeach = function(number) {
 }
 
 BeachBall.RiftAutoClick = function () {
-	if (BeachBall.Settings['RiftAutoClick'].status == 0)
+	if (BeachBall.Settings['RiftAutoClick'].status == 0) {
 		return;
+	}
 	
 	// Time Lord check	
-	if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
+	if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power)) {
 		return;
+	}
 	
 	// Farm crystals
 	if (BeachBall.Settings['RiftAutoClick'].status == 1) {
-		// when flux harvest is owned and ready use it to farm quickly
+		// When flux harvest is owned and ready, use it to farm quickly
 		if (Molpy.Boosts['Flux Harvest'] && Molpy.Boosts['Flux Harvest'].bought) {
 			Molpy.FluxHarvest();
-		else {
-			if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
-				Molpy.RiftJump();
-                        }
+		}
+		// Otherwise, just jump (without a rift)
+		else if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
+			Molpy.RiftJump();
 		}
 	}
 	// Rift for ONG
 	else if (BeachBall.Settings['RiftAutoClick'].status >= 2) {
+		// ninja mode with herder
+		var ninjaRitualHerder = BeachBall.Settings['NinjaMode'].status == 1 && Molpy.Boosts['Ninja Herder'] && Molpy.Boosts['Ninja Herder'].bought;
 		// rift occuring, sand in stock
 		// ninja click passed OR ninja ritual mode with ninja herder
 		if (Molpy.Got('Temporal Rift')
 				&& (Molpy.Boosts['Sand'].Has(1) || Molpy.Boosts['Sand'].Spend(1,1))
-				&& (BeachBall.GetBeachState() == 'beachsafe' ||
-					(BeachBall.Settings['NinjaMode'] == 1 && Molpy.Boosts['Ninja Herder'] && Molpy.Boosts['Ninja Herder'].bought))) {
+				&& (BeachBall.GetBeachState() == 'beachsafe' || ninjaRitualHerder)) {
 			Molpy.RiftJump();
-			// If Time Lord is used up and we want to jump to highest NP
-			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power) {
-				// TODO : Use Time Travel to return to highest NewPix
+			
+			// If Time Lord is used up and we want to jump to highest NP (and we aren't there)
+			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power && Molpy.newpixNumber != Molpy.highestNPvisited) {
+				// If we have a discovery there, let's use it!
+				if (Molpy.Earned('discov' + Molpy.highestNPvisited) {
+					Molpy.TTT(Molpy.highestNPvisited, 1);
+				}
+				// Or let's use Now Where Was I?
+				else if (Molpy.Boosts['Now Where Was I?'] && Molpy.Boosts['Now Where Was I?'].bought) {
+					Molpy.NowWhereWasI();
+				}
 			}
 		}
 	}
@@ -1224,9 +1235,9 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 	else if (option == 'RiftAutoClick') {
 		if (key == 'title')		{return 'Rift Autoclick';}
 		if (key == 'status') 	{return 0;}
-		if (key == 'maxStatus') {return 2;}
+		if (key == 'maxStatus') {return 3;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off', 'On - Flux Crystal', 'On - ONG'];}
+		if (key == 'desc')		{return ['Off', 'On - Flux Crystal', 'On - ONG', 'On - ONG<br/>Now Where Was I?'];}
 	}
 	else if (option == 'ClearLog') {
 		if (key == 'title')		{return 'Log Pruning';}
