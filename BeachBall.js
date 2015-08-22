@@ -1220,7 +1220,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'desc')		{return ['Off', 'On'];}
 	}
 	else if (option == 'ThePope') {
-		if (key == 'title')		{return 'The Pope AutoSelect';}
+		if (key == 'title')		{return 'The Pope: Decree AutoSelect';}
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return BeachBall.decreeNames.length;}
 		if (key == 'setting')	{return 5;}
@@ -1228,16 +1228,16 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'maxSetting'){return 30;}
 		if (key == 'msg')		{return 'Please enter your desired grace time for The Pope (0 - 30) seconds:';}
 		if (key == 'desc') {
-			var popeDescList = ['None<br/>Switch grace time: 5sec'];
-			for (i = 0; i < BeachBall.decreeNames.length; i++) {
-				var decree = Molpy.PapalDecrees[BeachBall.decreeNames[i]];
+			var popeDescList = ['None<br/>Switch grace time: <a onclick="BeachBall.SwitchSetting(\'ThePope\')">' + BeachBall.Settings[option].setting + ' sec</a>'];
+			for (var decNum = 0; decNum < BeachBall.decreeNames.length; decNum++) {
+				var decree = Molpy.PapalDecrees[BeachBall.decreeNames[decNum]];
 				var mod = decree.value > 1 ? (( decree.value*Molpy.PapalBoostFactor -1)*100) : 
 							     ((1-decree.value/Molpy.PapalBoostFactor)*100);
 				var desc = decree.desc.replace(/XX/,mod.toFixed(2));
-				/*if (!decree.avail()) {
+				if (!decree.avail()) {
 					desc = '<del>' + desc + '</del>';
 				}
-				desc = (i+1) + "/" + BeachBall.decreeNames.length + "<br/>" + desc;*/
+				desc = (decNum+1) + "/" + BeachBall.decreeNames.length + "<br/>" + desc;
 				popeDescList.push(desc);
 			}
 			return popeDescList;
