@@ -13,7 +13,7 @@ for (var decree in Molpy.PapalDecrees) {
 BeachBall.popeGrace = 0;
 
 //Version Information
-BeachBall.version = '5.3.2';
+BeachBall.version = '5.4.0';
 BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio info here, although audio has been removed. Maybe in the future it can be readded, so the code can stay.
@@ -880,7 +880,7 @@ BeachBall.ClearLog = function() {
 BeachBall.Pope = function() {
 	if (BeachBall.popeGrace > 0) {
 		BeachBall.popeGrace -= BeachBall.Settings['RefreshRate'].setting / 1000;
-	} else if (!Molpy.Decree && BeachBall.Settings['ThePope'].status > 0) {
+	} else if (!Molpy.Boosts['The Pope'].power && BeachBall.Settings['ThePope'].status > 0) {
 		var decName = BeachBall.decreeNames[BeachBall.Settings['ThePope'].status - 1];
 		var decree = Molpy.PapalDecrees[decName];
 		if (decree.avail()) {
