@@ -1220,9 +1220,9 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'desc')		{return ['Off', 'On'];}
 	}
 	else if (option == 'ThePope') {
-		if (key == 'title')		{return 'The Pope';}
+		if (key == 'title')		{return 'The Pope AutoSelect';}
 		if (key == 'status') 	{return 0;}
-		if (key == 'maxStatus') {return 1 + BeachBall.decreeNames.length;}
+		if (key == 'maxStatus') {return BeachBall.decreeNames.length;}
 		if (key == 'setting')	{return 5;}
 		if (key == 'minSetting'){return 0;}
 		if (key == 'maxSetting'){return 30;}
