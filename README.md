@@ -9,6 +9,7 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 * Logicats: Can be set to solve automatically. Caged logicats can automated, solving one by one, the maximum at once for QQ, or to get bonemeal.
 * Monty Haul: Can be set to auto-puchase and solve, either attempting for the 'prize' or the goat.
 * Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG.
+* The Pope Selector: Can be set to automatically select a specific Pope Decree when available. Switching has a grace period before the selection is chosen, so feel free to browse (the default grace period is 5seconds).
 * Tool Factory: The TF can be loaded faster (does not require TF Load Letter).
 * Faves Autoclicker: Using the Faves panel, any boost can be set up with an autoclick timer. (An example use would be to autoclick Question Qubes.)
 
@@ -30,6 +31,11 @@ This feature is performed using the Faves panel instead of the Options panel.
 * To disable (or view) a Faves autoclicker, select the boost in the Faves panel and toggle 'Visible' on. On the visible Fave boost, there should be a timer adjacent to the category label (looks like '[ 1s ]'). Click this timer to disable the boost autoclicker.
 
 ## Changelog
+
+###Version 5.4.0
+
+####Features
+* The Pope! You can now set The Pope to automatically choose a decree of your choice. All decrees are shown, unavailable ones are striked-through. There is a grace period (5 seconds by default) when switching between choices.
 
 ###Version 5.3.2
 
