@@ -711,7 +711,7 @@ BeachBall.RiftAutoClick = function () {
 			Molpy.FluxHarvest();
 		}
 		// Otherwise, just jump (without a rift)
-		else if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
+		else if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe')) {
 			Molpy.RiftJump();
 		}
 	}
@@ -729,7 +729,7 @@ BeachBall.RiftAutoClick = function () {
 			// If Time Lord is used up and we want to jump to highest NP (and we aren't there)
 			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power && Molpy.newpixNumber != Molpy.highestNPvisited) {
 				// If we have a discovery there, let's use it!
-				if (Molpy.Earned('discov' + Molpy.highestNPvisited) {
+				if (Molpy.Earned('discov' + Molpy.highestNPvisited)) {
 					Molpy.TTT(Molpy.highestNPvisited, 1);
 				}
 				// Or let's use Now Where Was I?
