@@ -697,33 +697,36 @@ BeachBall.ClickBeach = function(number) {
 BeachBall.RiftAutoClick = function () {
 	if (BeachBall.Settings['RiftAutoClick'].status == 0)
 		return;
-		
-	switch (parseInt(BeachBall.Settings['RiftAutoClick'].status)) {
 	
-		case 1 : // farm crystals
-
-			if (!(Molpy.Boosts['Flux Harvest'] && Molpy.Boosts['Flux Harvest'].bought)) {
-                                if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
-                                        return;
-                                if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
-                                        Molpy.RiftJump();
-                                break;
-                        } else { // when flux harvest is owned and ready use it to farm quickly
-                                if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power )) {
-                                        return;
-                                }
-                                if (Molpy.Boosts['Time Lord'].power > 0) {
-                                        Molpy.FluxHarvest();
-                                }
-                                break;
-                        }
-			
-		case 2 : // rift to ONG
-			if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
-				return;
-			if (Molpy.Got('Temporal Rift') && (Molpy.Boosts['Sand'].Has(1) || Molpy.Boosts['Sand'].Spend(1,1)) && (BeachBall.GetBeachState() == 'beachsafe')) // ninja click has passed, rift occuring, sand in stock
+	// Time Lord check	
+	if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
+		return;
+	
+	// Farm crystals
+	if (BeachBall.Settings['RiftAutoClick'].status == 1) {
+		// when flux harvest is owned and ready use it to farm quickly
+		if (Molpy.Boosts['Flux Harvest'] && Molpy.Boosts['Flux Harvest'].bought) {
+			Molpy.FluxHarvest();
+		else {
+			if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
 				Molpy.RiftJump();
-			break;
+                        }
+		}
+	}
+	// Rift for ONG
+	else if (BeachBall.Settings['RiftAutoClick'].status >= 2) {
+		// rift occuring, sand in stock
+		// ninja click passed OR ninja ritual mode with ninja herder
+		if (Molpy.Got('Temporal Rift')
+				&& (Molpy.Boosts['Sand'].Has(1) || Molpy.Boosts['Sand'].Spend(1,1))
+				&& (BeachBall.GetBeachState() == 'beachsafe' ||
+					(BeachBall.Settings['NinjaMode'] == 1 && Molpy.Boosts['Ninja Herder'] && Molpy.Boosts['Ninja Herder'].bought))) {
+			Molpy.RiftJump();
+			// If Time Lord is used up and we want to jump to highest NP
+			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power) {
+				// TODO : Use Time Travel to return to highest NewPix
+			}
+		}
 	}
 }
 
