@@ -1228,16 +1228,16 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'maxSetting'){return 30;}
 		if (key == 'msg')		{return 'Please enter your desired grace time for The Pope (0 - 30) seconds:';}
 		if (key == 'desc') {
-			var popeDescList = ['None<br/>Switch grace time: <a onclick="BeachBall.SwitchSetting(\'ThePope\')">' + BeachBall.Settings[option].setting + ' sec</a>'];
+			var popeDescList = ['None<br/>Switch grace time: 5sec'];
 			for (i = 0; i < BeachBall.decreeNames.length; i++) {
 				var decree = Molpy.PapalDecrees[BeachBall.decreeNames[i]];
 				var mod = decree.value > 1 ? (( decree.value*Molpy.PapalBoostFactor -1)*100) : 
 							     ((1-decree.value/Molpy.PapalBoostFactor)*100);
 				var desc = decree.desc.replace(/XX/,mod.toFixed(2));
-				if (!decree.avail()) {
+				/*if (!decree.avail()) {
 					desc = '<del>' + desc + '</del>';
 				}
-				desc = (i+1) + "/" + BeachBall.decreeNames.length + "<br/>" + desc;
+				desc = (i+1) + "/" + BeachBall.decreeNames.length + "<br/>" + desc;*/
 				popeDescList.push(desc);
 			}
 			return popeDescList;
