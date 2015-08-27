@@ -694,6 +694,21 @@ BeachBall.ClickBeach = function(number) {
 	}
 }
 
+// Run Now Where Was I?
+BeachBall.NWWI = function() {
+	if (Molpy.newpixNumber == Molpy.highestNPvisited) {
+		return;
+	}
+	// If we have a discovery there, let's use it!
+	if (Molpy.Earned('discov' + Molpy.highestNPvisited)) {
+		Molpy.TTT(Molpy.highestNPvisited, 1);
+	}
+	// Or let's use Now Where Was I?
+	else if (Molpy.Boosts['Now Where Was I?'] && Molpy.Boosts['Now Where Was I?'].bought) {
+		Molpy.NowWhereWasI();
+	}
+}
+
 BeachBall.RiftAutoClick = function () {
 	if (BeachBall.Settings['RiftAutoClick'].status == 0) {
 		return;
@@ -701,6 +716,13 @@ BeachBall.RiftAutoClick = function () {
 	
 	// Time Lord check	
 	if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power)) {
+		return;
+	}
+	
+	// Now Where Was I? safety check.
+	// If the ONG is about to hit, NWWI?
+	if (BeachBall.Time_to_ONG < 5 && BeachBall.Settings['RiftAutoClick'].status == 3) {
+		BeachBall.NWWI();
 		return;
 	}
 	
@@ -727,15 +749,8 @@ BeachBall.RiftAutoClick = function () {
 			Molpy.RiftJump();
 			
 			// If Time Lord is used up and we want to jump to highest NP (and we aren't there)
-			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power && Molpy.newpixNumber != Molpy.highestNPvisited) {
-				// If we have a discovery there, let's use it!
-				if (Molpy.Earned('discov' + Molpy.highestNPvisited)) {
-					Molpy.TTT(Molpy.highestNPvisited, 1);
-				}
-				// Or let's use Now Where Was I?
-				else if (Molpy.Boosts['Now Where Was I?'] && Molpy.Boosts['Now Where Was I?'].bought) {
-					Molpy.NowWhereWasI();
-				}
+			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power) {
+				BeachBall.NWWI();
 			}
 		}
 	}
