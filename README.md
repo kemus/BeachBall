@@ -32,6 +32,19 @@ This feature is performed using the Faves panel instead of the Options panel.
 
 ## Changelog
 
+###Version 5.4.2
+
+####Improvements
+* Rift ONG- NWWI will now stop rifting and perform a NWWI jump if you still have Time Lord power within 5seconds of the natural ONG.
+* If using Rift-ONG (including NWWI), check for Flux Harvest right before the natural ONG (if there is still Time Lord power).
+ * Will always Harvest if Fertiliser will not activate and Flux is finite.
+ * If Fertiliser will activate, only Harvests at >2M Bonemeal and you'll get a decent bonus from Fertiliser based on the amount of Time Lord you have left. (The actual math involved is a bit arbitrary. If you don't want Fertiliser used, turn it off.)
+* Small edge case involving the autoclicker, Ninja Ritual Mode, and Rift - ONG. In this case, the clicker will now continue clicking instead of pausing after each rift.
+* Caged Logicat - Get Bonemeal has got some improved logic.
+ * No longer cheats and consumes < 100 cats.
+ * Feeds the Shadow Dragon at <= 110 cats, as this few cats is worth about 1 Bonemeal anyway.
+ * Feeds the Shadow Dragon at >= 100M cats, as at this point the game gives us a flat 25% generous chance.
+
 ###Version 5.4.1
 
 ####Features
