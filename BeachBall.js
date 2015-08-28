@@ -689,7 +689,12 @@ BeachBall.MontyHaul = function() {
 }
 
 BeachBall.ClickBeach = function(number) {
-	if (Molpy.Got('Temporal Rift') == 0 && Molpy.ninjad != 0 && BeachBall.Time_to_ONG >= 5){
+	// Special Case: Ninja Ritual Mode + Rift - ONG
+	// This case is used for fast clicking when rifting (so we don't have to wait for the mNP refresh).
+	var specialSafe = BeachBall.Settings['NinjaMode'].status == 1 && BeachBall.Settings['RiftAutoClick'].status >= 2;
+	// Normal Case: No Rift + Beach already clicked from BeachBall refresh functions.
+	var beachSafe = Molpy.Got('Temporal Rift') == 0 && Molpy.ninjad != 0;
+	if ((specialSafe || beachSafe) && BeachBall.Time_to_ONG >= 5){
 		Molpy.ClickBeach();
 	}
 }
@@ -719,10 +724,21 @@ BeachBall.RiftAutoClick = function () {
 		return;
 	}
 	
-	// Now Where Was I? safety check.
-	// If the ONG is about to hit, NWWI?
-	if (BeachBall.Time_to_ONG < 5 && BeachBall.Settings['RiftAutoClick'].status == 3) {
-		BeachBall.NWWI();
+	// If the ONG is about to hit, possibly FluxHarvest and/or NWWI?
+	if (BeachBall.Time_to_ONG < 5 && BeachBall.Settings['RiftAutoClick'].status >= 2) {
+		// Check for Flux Harvest desirability.
+		// We must have Flux Harvest, and finite Flux.
+		// - If Fertiliser is inactive, or would not activate anyway, pop FluxHarvest.
+		// - Otherwise if TL.level >= sqrt(Fertiliser Multiplier) * TL.bought and Bonemeal > 2M
+		if (Molpy.Boosts['Flux Harvest'] && Molpy.Boosts['Flux Harvest'].bought && !Molpy.Has('FluxCrystals', Infinity) &&
+				(!Molpy.IsEnabled('Fertiliser') || Molpy.Level('Time Lord') < 100 || !Molpy.Has('Bonemeal', Math.ceil(1000+Molpy.Boosts['Bonemeal'].power/50)) ||
+				(Molpy.Level('Time Lord') * Math.pow(1.001,Molpy.Boosts['Bonemeal'].power/2000) >= Molpy.Boosts['Time Lord'].bought && Molpy.Has('Bonemeal', 2000000)))) {
+			Molpy.FluxHarvest();
+		}
+		// Now Where Was I? if that setting is enabled.
+		if (BeachBall.Settings['RiftAutoClick'].status == 3) {
+			BeachBall.NWWI();
+		}
 		return;
 	}
 	
