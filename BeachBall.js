@@ -1163,16 +1163,18 @@ BeachBall.CreateMenu = function() {
 
 BeachBall.DisplayDescription = function(option,type) {
 	var me = BeachBall.Settings[option];
-	// var me = option;
-	description = me.desc[me.status];
+	var description = me.desc[me.status];
+	var title = me.title;
 	
+	// Autoclicker special action
 	if (option == 'BeachAutoClick') {
 		clearInterval(BeachBall.BeachAutoClickTimer);
 		if (me.status >= 2) {
 			BeachBall.BeachAutoClickTimer = setInterval(BeachBall.ClickBeach, 1000/me.setting);
 		}
 	}
-	var title = me.title;
+	
+	// Tool factory special actions
 	if (option == 'ToolFactory') {
 		if (Molpy.Boosts['TF'].bought == 1) {
 			title = '<a onclick="BeachBall.LoadToolFactory()">Tool Factory</a>';
@@ -1187,6 +1189,12 @@ BeachBall.DisplayDescription = function(option,type) {
 		g('BBToolFactory').innerHTML = title;
 		g(option + 'Desc').innerHTML = '<br>' + description;
 	}
+	
+	// The Pope special action
+	if (option == 'ThePope' && type == 'desc') {
+		description = BeachBall.LoadDefaultSetting(option, type)[me.status];
+	}
+	
 	if (type == 'desc') {
 		return description;
 	}
@@ -1389,6 +1397,7 @@ BeachBall.SwitchSetting = function(option) {
 		}
 		me.desc = BeachBall.LoadDefaultSetting(option, 'desc');
 		BeachBall.DisplayDescription(option);
+		Molpy.RefreshOptions();
 	}
 }
 
