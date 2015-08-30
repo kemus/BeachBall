@@ -725,17 +725,18 @@ BeachBall.RiftAutoClick = function () {
 	}
 	
 	// If the ONG is about to hit, possibly NWWI?
-	if (BeachBall.Time_to_ONG > 0 && BeachBall.Time_to_ONG < 5 && BeachBall.Settings['RiftAutoClick'].status == 3) {
+	if (BeachBall.Time_to_ONG > 1 && BeachBall.Time_to_ONG < 32 && BeachBall.Settings['RiftAutoClick'].status == 3) {
 		BeachBall.NWWI();
 	}
 	
-	// Time Lord check	
+	// Time Lord check
 	if (!(Molpy.Got('Time Lord') && Molpy.Boosts['Time Lord'].power)) {
 		return;
 	}
 	
 	// If the ONG is about to hit, possibly FluxHarvest - regardless skip any further rift action
-	if (BeachBall.Time_to_ONG > 1 && BeachBall.Time_to_ONG < 5 && BeachBall.Settings['RiftAutoClick'].status >= 2) {
+	// We must Harvest in time for any rifts to dissipate before the ONG.
+	if (BeachBall.Time_to_ONG < 32 && BeachBall.Settings['RiftAutoClick'].status >= 2) {
 		// Check for Flux Harvest desirability.
 		// We must have Flux Harvest, and finite Flux.
 		// - If Fertiliser is inactive, or would not activate anyway, pop FluxHarvest.
