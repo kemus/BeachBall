@@ -14,7 +14,7 @@ for (var decree in Molpy.PapalDecrees) {
 BeachBall.popeGrace = 0;
 
 //Version Information
-BeachBall.version = '5.4.3';
+BeachBall.version = '5.5.0';
 BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio code has been commented.
@@ -694,6 +694,9 @@ BeachBall.MontyHaul = function() {
 }
 
 BeachBall.ClickBeach = function(number) {
+	if (!BeachBall.enabled) {
+		return;
+	}
 	// Special Case: Ninja Ritual Mode + Rift - ONG
 	// This case is used for fast clicking when rifting (so we don't have to wait for the mNP refresh).
 	var specialSafe = BeachBall.Settings['NinjaMode'].status == 1 && BeachBall.Settings['RiftAutoClick'].status >= 2;
@@ -1055,6 +1058,9 @@ BeachBall.ToggleAutoclickFav = function(fav,shown) {
 BeachBall.getAutoClickFav = function (fav_to_auto) {
 	return (function (_fav) {
 		return function(){
+			if (!BeachBall.enable) {
+				return;
+			}
 			var me = BeachBall.FavsAutoclick[_fav];
 			if (me.timer) {
 				var buttons = $("#sectionFave"+me.fave+" input[type=Button]");
@@ -1128,7 +1134,9 @@ BeachBall.CreateMenu = function() {
 		name: 'BB.title',
 		title: '<h3 style="font-size:150%; color:red">BeachBall Settings</h3> ',		
 		breakafter : true,
-		text: function() { return '<h4 style"font-size:75%">v ' + BeachBall.version + '</div>' },
+		onchange: function() { BeachBall.enabled = !BeachBall.enabled; },
+		text: function() { return '<h4 style"font-size:75%">v ' + BeachBall.version + '</h4><b>' +
+				(BeachBall.enabled ? 'Enabled' : 'Disabled') + '</b></div>' },
 	});
 	
 	//Replace with Loop!
@@ -1476,8 +1484,8 @@ function BeachBallMainProgram() {
 		BeachBall.RiftAutoClick();
 		BeachBall.Pope(); // Second run of pope. Just in case things changed due to Rift ONG.
 		BeachBall.ClearLog();
-		BeachBall.StartLoop();
 	}
+	BeachBall.StartLoop();
 }
 
 BeachBall.StartLoop = function () {
