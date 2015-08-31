@@ -1058,7 +1058,7 @@ BeachBall.ToggleAutoclickFav = function(fav,shown) {
 BeachBall.getAutoClickFav = function (fav_to_auto) {
 	return (function (_fav) {
 		return function(){
-			if (!BeachBall.enable) {
+			if (!BeachBall.enabled) {
 				return;
 			}
 			var me = BeachBall.FavsAutoclick[_fav];
