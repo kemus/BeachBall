@@ -11,6 +11,7 @@ Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.ht
 * Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG (including optional return with Now Where Was I?).
 * The Pope Selector: Can be set to automatically select a specific Pope Decree when available. Switching has a grace period before the selection is chosen, so feel free to browse (the default grace period is 5seconds).
 * Tool Factory: The TF can be loaded faster (does not require TF Load Letter).
+* Dragon Queen: The queen can be set to automatically lay eggs, up to the requested amount.
 * Faves Autoclicker: Using the Faves panel, any boost can be set up with an autoclick timer. (An example use would be to autoclick Question Qubes.)
 
 (Audio alerts are currently non-functional.)
@@ -31,6 +32,15 @@ This feature is performed using the Faves panel instead of the Options panel.
 * To disable (or view) a Faves autoclicker, select the boost in the Faves panel and toggle 'Visible' on. On the visible Fave boost, there should be a timer adjacent to the category label (looks like '[ 1s ]'). Click this timer to disable the boost autoclicker.
 
 ## Changelog
+
+###Version 5.6.0
+
+####Features
+* Dragon Queen autoclicker. When on, and below the desired number of eggs, the queen will automatically attempt to lay eggs. You will still have to control feeding and fledging yourself, but there are boosts that help with those. Also pay attention to your nest linings - in the future BeachBall may have an option to set and check them before laying an egg, but for now this is up to you.
+
+####Changes
+* Hiding from Knights now delays clicking the Hide button until the last possible moment. This should get max uptime on digging while hiding from knights.
+* Started reorganizing the options list. More changes may follow.
 
 ###Version 5.5.0
 
