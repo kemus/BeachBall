@@ -14,7 +14,7 @@ for (var decree in Molpy.PapalDecrees) {
 BeachBall.popeGrace = 0;
 
 //Version Information
-BeachBall.version = '5.5.0';
+BeachBall.version = '5.6.0';
 BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
 // NOTE: Tons of audio code has been commented.
@@ -876,7 +876,10 @@ BeachBall.RedundaKitty = function() {
 			} else if (meKnight.status == 3) {
 				Molpy.DragonKnightAttack(2);
 			} else if (meKnight.status == 4) {
-				Molpy.DragonsHide(0);
+				// Hide the Knight at the less second
+				if (BeachBall.RKTimer <= 3) {
+					Molpy.DragonsHide(0);
+				}
 			}
 		}
 		
@@ -934,8 +937,8 @@ BeachBall.ToggleMenus = function(wantOpen) {
 }
 
 BeachBall.ClearLog = function() {
-	if (BeachBall.Settings['ClearLog'].status == 1 ) {
-		Molpy.ClearLog()
+	if (BeachBall.Settings['ClearLog'].status == 1) {
+		Molpy.ClearLog();
 	}
 }
 
@@ -948,6 +951,13 @@ BeachBall.Pope = function() {
 		if (decree.avail()) {
 			Molpy.SelectPapalDecree(decName);
 		}
+	}
+}
+
+BeachBall.Dragons = function() {
+	if (BeachBall.Settings['DragonQueen'].status == 1 && Molpy.Got('DQ') && (!Molpy.Got('Eggs') || Molpy.Boosts['Eggs'].Level < BeachBall.Settings['DragonQueen'].setting)) {
+		// This is the Dragon Queen button code
+		if(Molpy.Spend({Bonemeal: Molpy.EggCost()}))Molpy.Add('Eggs',1);
 	}
 }
 
@@ -1288,7 +1298,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 4;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off', 'Attack', 'Strength Potion', 'Breath<br/>(Placeholder)', 'Hide'];}
+		if (key == 'desc')		{return ['Off', 'Attack', 'Strength Potion', 'Breath<br/>(Placeholder)', 'Hide<br/>(Triggers at <= 3mNP)'];}
 	}
 	else if (option == 'ToolFactory') {
 		if (key == 'title')		{return 'Tool Factory';}
@@ -1338,6 +1348,16 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 			return popeDescList;
 		}
 	}
+	else if (option == 'DragonQueen') {
+		if (key == 'title')		{return 'Dragon Queen Eggs';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1;}
+		if (key == 'setting')	{return 1;}
+		if (key == 'minSetting'){return 1;}
+		if (key == 'maxSetting'){return 100;}
+		if (key == 'msg')		{return 'How many dragon eggs should the Queen maintain? (1 - 100):';}
+		if (key == 'desc')		{return ['Off', 'Autolay: <a onclick="BeachBall.SwitchSetting(\'DragonQueen\')">' + BeachBall.Settings[option].setting + ' eggs</a>'];}
+	}
 	else {
 		Molpy.Notify(BeachBall.Settings[option] + ' setting not found. Please contact developer.', 1);
 		return -1;
@@ -1348,8 +1368,11 @@ BeachBall.LoadSettings = function() {
 	/* Removed AudioAlert
 	The option 'AudioAlerts' was removed from the front of BeachBall.AllOptions
 	*/
-	BeachBall.AllOptions = ['BeachAutoClick', 'NinjaMode', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate',
-							'RKAutoClick', 'KnightActions', 'ToolFactory', 'RiftAutoClick', 'ThePope', "ClearLog"];
+	BeachBall.AllOptions = ['BeachAutoClick', 'NinjaMode',
+							'RKAutoClick', 'LCSolver', 'CagedAutoClick',
+							'MHAutoClick', 'ToolFactory', 'RiftAutoClick', 'ThePope',
+							'KnightActions', 'DragonQueen',
+							'RefreshRate', "ClearLog"];
 	BeachBall.AllOptionsKeys = ['title', 'status', 'maxStatus', 'setting', 'minSetting', 'maxSetting', 'msg', 'desc'];
 	BeachBall.SavedOptionsKeys = ['status', 'setting'];
 	BeachBall.SavedMetaKeys = ['enabled', 'graceTime'];
@@ -1483,6 +1506,7 @@ function BeachBallMainProgram() {
 		BeachBall.MontyHaul();
 		BeachBall.RiftAutoClick();
 		BeachBall.Pope(); // Second run of pope. Just in case things changed due to Rift ONG.
+		BeachBall.Dragons();
 		BeachBall.ClearLog();
 	}
 	BeachBall.StartLoop();
