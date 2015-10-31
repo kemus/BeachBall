@@ -1,21 +1,124 @@
 # BeachBall
 
+Helper addon for Sandcastle Builder (http://castle.chirpingmustard.com/castle.html).
+
 ## Features
 
-* Kitties have a timer on top of the screen, to tell you when there is a kitty.
-* you can activate Autoclick on kitties, or just an auto-focus on the kitty
-* You can put audio alerts on common events
-* You can add autoclick on the picture (1 click for keeping ninja, or multiple click per second)
-* Logicats can be solved automaticaly
-* Tool factory can be loaded faster
-* Caged logicat can be automated to solve every logicat one by one, the max at once for QQ, or get bonemeal.
+* Beach Autoclicking: Can be set to click the NewPix, just once per NP (to keep up Stealth/Ritual) or x times per second. Can be toggled between keeping Ninja Stealth or Ninja Ritual.
+* Kitties: Kitties have a timer on top of the screen, to tell you when there is a kitty. Can be set to autoclick kitties, or to auto-focus on the kitty. Can also fight Knights.
+* Logicats: Can be set to solve automatically. Caged logicats can automated, solving one by one, the maximum at once for QQ, or to get bonemeal.
+* Monty Haul: Can be set to auto-puchase and solve, either attempting for the 'prize' or the goat.
+* Temporal Rifts: Can be set to use automatically use rifts, either to farm flux crystals or for the ONG (including optional return with Now Where Was I?).
+* The Pope Selector: Can be set to automatically select a specific Pope Decree when available. Switching has a grace period before the selection is chosen, so feel free to browse (the default grace period is 5seconds).
+* Tool Factory: The TF can be loaded faster (does not require TF Load Letter).
+* Dragon Queen: The queen can be set to automatically lay eggs, up to the requested amount.
+* Faves Autoclicker: Using the Faves panel, any boost can be set up with an autoclick timer. (An example use would be to autoclick Question Qubes.)
+
+(Audio alerts are currently non-functional.)
 
 ## How to use this script ?
 
-Start by installing this script (instructions here : http://xenko.github.io/BeachBall/)
-Go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
+Start by installing this script (http://github.com/codeRitter/BeachBall) using one of two methods:
+
+A. If you have Greasemonkey (for Firefox) or Tampermonkey (for Chrome), install BeachBall_Monkey_Loader.js (instuctions for using Xmonkey can be found elsewhere). The BeachBall addon will automatically load 5 seconds after loading the game page (you must reload the game page once after installing - don't forget to save).
+
+B. If you do NOT have one of those addons, copy the contents of BeachBall_Bookmark_Loader.js into a bookmark (paste onto the link/location/destination, and not the description or name). You will need to click your bookmark once to get the BeachBall addon to load - EVERY time you reload the game page, you must reclick the bookmark loader.
+
+Once loaded, go in the Option panel of the game, and you will find every option to enable at the bottom of the panel.
+
+####Special Feature: Faves Autoclicker
+This feature is performed using the Faves panel instead of the Options panel.
+* To set an autoclicker for a boost, open the Faves panel and select the desired boost (if the boost is not already in the dropdown selection, use the 'Choose' button to make a new fave). With the boost selection, click 'AutoClick' and follow the directions on the popup to set the timer. The timer frequency can be changed later using the same process.
+* To disable (or view) a Faves autoclicker, select the boost in the Faves panel and toggle 'Visible' on. On the visible Fave boost, there should be a timer adjacent to the category label (looks like '[ 1s ]'). Click this timer to disable the boost autoclicker.
 
 ## Changelog
+
+###Version 5.6.0
+
+####Features
+* Dragon Queen autoclicker. When on, and below the desired number of eggs, the queen will automatically attempt to lay eggs. You will still have to control feeding and fledging yourself, but there are boosts that help with those. Also pay attention to your nest linings - in the future BeachBall may have an option to set and check them before laying an egg, but for now this is up to you.
+
+####Changes
+* Hiding from Knights now delays clicking the Hide button until the last possible moment. This should get max uptime on digging while hiding from knights.
+* Started reorganizing the options list. More changes may follow.
+
+###Version 5.5.0
+
+####Features
+* Toggle added to turn BeachBall autoclicking on or off. Click the red BeachBall Settings option to toggle. Turning BeachBall off disables it from clicking anything, but you can still change any options you want.
+
+###Version 5.4.3
+
+####Bug Fixes
+* The options display now updates when a setting (such as cps) changes.
+* The Pope will now update what has strikethrough (and the number will update) when the status is changed.
+* Rift - ONG should no longer use FluxHarvest too close to the ONG.
+* Rift - ONG NWWI should attempt a last minute NWWI? to rectify cost/timing issues.
+
+###Version 5.4.2
+
+####Improvements
+* Rift ONG- NWWI will now stop rifting and perform a NWWI jump if you still have Time Lord power within 5seconds of the natural ONG.
+* If using Rift-ONG (including NWWI), check for Flux Harvest right before the natural ONG (if there is still Time Lord power).
+ * Will always Harvest if Fertiliser will not activate and Flux is finite.
+ * If Fertiliser will activate, only Harvests at >2M Bonemeal and you'll get a decent bonus from Fertiliser based on the amount of Time Lord you have left. (The actual math involved is a bit arbitrary. If you don't want Fertiliser used, turn it off.)
+* Small edge case involving the autoclicker, Ninja Ritual Mode, and Rift - ONG. In this case, the clicker will now continue clicking instead of pausing after each rift.
+* Caged Logicat - Get Bonemeal has got some improved logic.
+ * No longer cheats and consumes < 100 cats.
+ * Feeds the Shadow Dragon at <= 110 cats, as this few cats is worth about 1 Bonemeal anyway.
+ * Feeds the Shadow Dragon at >= 100M cats, as at this point the game gives us a flat 25% generous chance.
+
+###Version 5.4.1
+
+####Features
+* New setting for Rift Autoclik available: On - ONG + Now Where Was I? After running out of Time Lord uses on this setting, it uses Now Where Was I? to return to your highest NewPix.
+
+####Fixes
+* Cleaned Rift logic and code.
+* New Rift situation coded for: if you are on Ninja Ritual Mode and own Ninja Herder, then Rift - ONG will use the rift regardless of the state of the NPBs (since entering the rift will cause ritual). This specifically targets the edge case where you use Rift - ONG but don't use the autoclicker, but it should help a few other rare cases/times as well.
+
+###Version 5.4.0
+
+####Features
+* The Pope! You can now set The Pope to automatically choose a decree of your choice. All decrees are shown, unavailable ones are striked-through. There is a grace period (5 seconds by default) when switching between choices.
+
+###Version 5.3.2
+
+####Features
+* Knight Autoclicker is now its own feature! For all your Attack/Hide needs. Keep in mind, with the next game update soon, this feature is a touch rough around the edges (just like Knights themselves).
+
+####Changes
+* Kitty Autoclicker no longer overwrites either Knight or Logicat autoclickers.
+
+###Version 5.3.1.1
+
+####Bug Fixes
+* No longer unintentionally clicking 1/NP if Ninja Mode:Ritual and Beach Autoclicker:Off.
+* Fixed highly unlikely edge case if you constantly spawn Temporal Rifts (via tons of single Logicats, for example) in Ninja Ritual with Autoclicker on, where you could miss extending the ritual and then possibly click for stealth.
+
+###Version 5.3.1
+
+####Changes
+* Ninja Ritual has been split from Beach AutoClick. Beach Autoclick has only 3 modes again: Off, Click once per NP, CPS. There is a new option: NPB Ninja Mode, which can be set to either Ninja Stealth or Ninja Ritual. Now you can toggle your autoclicker when the NPB timer is counting down! Players who previously used CPS (ritual) will have their mode initially set to Ritual, everyone else will be initally set to Stealth. (As a side note, this change means you should be able to ritual without clicking once a second and without Herder.)
+* Refresh Rate is now changable. Set it lower to have BeachBall execute commands (such as kitties) faster, or set it higher to slow the addon down.
+
+###Version 5.3.0
+
+####Changes
+* Audio (which didn't work) has been removed.
+
+####Fixes
+* ONG Rift logic (to account for Aleph One and cracks).
+* 'Cristal' is no longer a word.
+
+###Version 5.2.0.5
+
+####New Features
+* Flux Harvest will now be used to harvest flux if it is available.
+* NEW: Clear log option. Clears the in-game log to reduce lag.
+
+####Bug Fixes/Improvements
+* Improvements to logicat, including max solve fix.
 
 ###Version 5.2.0
 

@@ -1,14 +1,25 @@
 //Declare and Initialize Variables
 var BeachBall = {};
+BeachBall.enabled = true;
 BeachBall.incoming_ONG = 0;
 BeachBall.Time_to_ONG = 1800000;
-BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean', 'ceil', 'drac', 'stuff', 'land', 'prize', 'discov', 'monums', 'monumg', 'tagged', 'badgesav'];
+BeachBall.lootBoxes = ['boosts', 'badges', 'hpt', 'ninj', 'chron', 'cyb', 'bean', 'ceil', 'drac', 'stuff', 'land', 
+//dimen,varie, //v4.0 addition: need to be slotted in on the update. Commented out for obvious reasons
+'prize', 'discov', 'monums', 'monumg', 'tagged', 'badgesav'];
 BeachBall.resetCaged = 0;
+BeachBall.decreeNames = [];
+for (var decree in Molpy.PapalDecrees) {
+	BeachBall.decreeNames.push(decree);
+}
+BeachBall.popeGrace = 0;
 
 //Version Information
-BeachBall.version = '5.2.0.2';
-BeachBall.SCBversion = '3.33333'; //Last SandCastle Builder version tested
+BeachBall.version = '5.6.0';
+BeachBall.SCBversion = '3.667'; //Last SandCastle Builder version tested
 
+// NOTE: Tons of audio code has been commented.
+// NOTE: To re-enable audio, uncomment 'AudioAlert' comments.
+/* Removed: AudioAlert
 //BB Audio Alerts Variables
 BeachBall.audio_Bell = new Audio("http://xenko.comxa.com/Ship_Bell.mp3");
 	BeachBall.audio_Bell.volume = 1;
@@ -17,17 +28,18 @@ BeachBall.audio_Chime = new Audio("http://xenko.comxa.com/Chime.mp3");
 BeachBall.RKAlertFrequency = 8;
 if (Molpy.Got('Kitnip') == 1){BeachBall.RKAlertFrequency = 10;}
 BeachBall.RKPlayAudio = 1;
+BeachBall.RKNewAudio = 1;
+*/
 
 //RK Variables
 BeachBall.RKLevel = '-1';
 BeachBall.RKLocation = '123';
 BeachBall.RKNew = 1;
-BeachBall.RKNewAudio = 1;
 BeachBall.RKTimer = Molpy.Redacted.toggle - Molpy.Redacted.countup;
 
 //Caged Logicat Variables
 BeachBall.cagedTimeout = false;
-BeachBall.cagedTimeoutLength = 5000;
+BeachBall.cagedTimeoutLength = 3600;
 BeachBall.Puzzle = {};
 
 BeachBall.PuzzleConstructor = function(name) {
@@ -74,7 +86,8 @@ BeachBall.PuzzleConstructor = function(name) {
 	
 	this.PopulateStatements = function() {
 		var i = 0;
-		var j = this.puzzleString.indexOf(">") + 1;
+		var j = this.puzzleString.indexOf("]<br>") > 0 ? this.puzzleString.indexOf("]<br>") + 5 : this.puzzleString.indexOf(">")+1;
+		// console.log(this.puzzleString);
 		var k = 0;
 		var l = 0;
 		var m = 0;
@@ -567,16 +580,34 @@ BeachBall.CagedAutoClick = function() {
 		}
 		// Buy Maximum Puzzles, or Singles if Max is less than 10
 		else if (me.status == 2) {
-			if (Molpy.PokeBar() >= 11 && Molpy.Level('LogiPuzzle') >= Molpy.PokeBar() && tens && Molpy.Has('GlassBlocks', costMulti)) {
+			if (Molpy.PokeBar() >= 11 && Molpy.Level('LogiPuzzle') >= Molpy.PokeBar() * .9  && tens && Molpy.Has('GlassBlocks', costMulti)) {
 				Molpy.MakeCagedPuzzle(costMulti, tens);
 			}
-			else if (Molpy.PokeBar() < 11) {
+			else if (Molpy.Has('GlassBlocks', costSingle)){
 				Molpy.MakeCagedPuzzle(costSingle);
 			}
 		}
-		// Trade Logicats for Bonemeal
-		else if (me.status == 3 && Molpy.Got('ShadwDrgn') && Molpy.Level('LogiPuzzle') >= 100) {
-			Molpy.ShadowStrike(1);
+		// Trade Logicats for Bonemeal and solve continuous logicats
+		else if (me.status == 3) {
+			if (Molpy.Got('ShadwDrgn') && Molpy.Level('LogiPuzzle') >= 100) {
+				// only shadowstrike at good times
+				if ((Molpy.Level('LogiPuzzle')%100 > 85 && Molpy.PokeBar() > 100) ||
+						(Molpy.Level('LogiPuzzle') <= 110) || (Molpy.Level('LogiPuzzle') >= 100000000)) {
+					Molpy.ShadowStrike(1);
+				}
+				// unless you are close to max then you gotta do it
+				else if (Molpy.Level('LogiPuzzle') > 100 && Molpy.Level('LogiPuzzle') > Molpy.PokeBar() * .9) {
+					Molpy.ShadowStrike(1);
+				}
+				// otherwise just use a logicat
+				else if (Molpy.Has('GlassBlocks', costSingle)) {
+					Molpy.MakeCagedPuzzle(costSingle);
+				}
+			}
+			// dont have the ability to shadow strike yet? its a solve single
+			else if (Molpy.Has('GlassBlocks', costSingle)) {
+				Molpy.MakeCagedPuzzle(costSingle);
+			}
 		}
 	}
 
@@ -599,7 +630,7 @@ BeachBall.FindRK = function() {
 	RV of 4 is Boosts Menus, Hill People Tech, etc.
 	RV of 5 is Badges Earned, Discovery, Monuments and Glass Monuments
 	RV of 6 is Badges Available */
-   
+
 	//Determines RK location
 	BeachBall.RKLocation = '123';
 	if (Molpy.Redacted.location == 6) {
@@ -663,32 +694,91 @@ BeachBall.MontyHaul = function() {
 }
 
 BeachBall.ClickBeach = function(number) {
-	if (Molpy.Got('Temporal Rift') == 0 && Molpy.ninjad != 0 && BeachBall.Time_to_ONG >= 5){
+	if (!BeachBall.enabled) {
+		return;
+	}
+	// Special Case: Ninja Ritual Mode + Rift - ONG
+	// This case is used for fast clicking when rifting (so we don't have to wait for the mNP refresh).
+	var specialSafe = BeachBall.Settings['NinjaMode'].status == 1 && BeachBall.Settings['RiftAutoClick'].status >= 2;
+	// Normal Case: No Rift + Beach already clicked from BeachBall refresh functions.
+	var beachSafe = Molpy.Got('Temporal Rift') == 0 && Molpy.ninjad != 0;
+	if ((specialSafe || beachSafe) && BeachBall.Time_to_ONG >= 5){
 		Molpy.ClickBeach();
 	}
 }
 
-BeachBall.RiftAutoClick = function () {
-	if (BeachBall.Settings['RiftAutoClick'].status == 0)
+// Run Now Where Was I?
+BeachBall.NWWI = function() {
+	if (Molpy.newpixNumber == Molpy.highestNPvisited) {
 		return;
-		
-	switch (parseInt(BeachBall.Settings['RiftAutoClick'].status)) {
+	}
+	// If we have a discovery there, let's use it!
+	if (Molpy.Earned('discov' + Molpy.highestNPvisited)) {
+		Molpy.TTT(Molpy.highestNPvisited, 1);
+	}
+	// Or let's use Now Where Was I?
+	else if (Molpy.Got('Now Where Was I?')) {
+		Molpy.NowWhereWasI();
+	}
+}
+
+BeachBall.RiftAutoClick = function () {
+	if (BeachBall.Settings['RiftAutoClick'].status == 0) {
+		return;
+	}
 	
-		case 1 : // farm crystals
-			// check TL
-			if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
-				return;
+	// If the ONG is about to hit, possibly NWWI?
+	if (BeachBall.Time_to_ONG > 1 && BeachBall.Time_to_ONG < 32 && BeachBall.Settings['RiftAutoClick'].status == 3) {
+		BeachBall.NWWI();
+	}
+	
+	// Time Lord check
+	if (!(Molpy.Got('Time Lord') && Molpy.Boosts['Time Lord'].power)) {
+		return;
+	}
+	
+	// If the ONG is about to hit, possibly FluxHarvest - regardless skip any further rift action
+	// We must Harvest in time for any rifts to dissipate before the ONG.
+	if (BeachBall.Time_to_ONG < 32 && BeachBall.Settings['RiftAutoClick'].status >= 2) {
+		// Check for Flux Harvest desirability.
+		// We must have Flux Harvest, and finite Flux.
+		// - If Fertiliser is inactive, or would not activate anyway, pop FluxHarvest.
+		// - Otherwise if TL.level >= sqrt(Fertiliser Multiplier) * TL.bought and Bonemeal > 2M
+		if (Molpy.Got('Flux Harvest') && !Molpy.Has('FluxCrystals', Infinity) &&
+				(!Molpy.IsEnabled('Fertiliser') || Molpy.Level('Time Lord') < 100 || !Molpy.Has('Bonemeal', Math.ceil(1000+Molpy.Boosts['Bonemeal'].power/50)) ||
+				(Molpy.Level('Time Lord') * Math.pow(1.001,Molpy.Boosts['Bonemeal'].power/2000) >= Molpy.Boosts['Time Lord'].bought && Molpy.Has('Bonemeal', 2000000)))) {
+			Molpy.FluxHarvest();
+		}
+		return;
+	}
+	
+	// Farm crystals
+	if (BeachBall.Settings['RiftAutoClick'].status == 1) {
+		// When flux harvest is owned and ready, use it to farm quickly
+		if (Molpy.Got('Flux Harvest')) {
+			Molpy.FluxHarvest();
+		}
+		// Otherwise, just jump (without a rift)
+		else if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe')) {
+			Molpy.RiftJump();
+		}
+	}
+	// Rift for ONG
+	else if (BeachBall.Settings['RiftAutoClick'].status >= 2) {
+		// ninja mode with herder
+		var ninjaRitualHerder = BeachBall.Settings['NinjaMode'].status == 1 && Molpy.Got('Ninja Herder');
+		// rift occuring, sand in stock
+		// ninja click passed OR ninja ritual mode with ninja herder
+		if (Molpy.Got('Temporal Rift')
+				&& (Molpy.Boosts['Sand'].Has(1) || Molpy.Boosts['Sand'].Spend(1,1))
+				&& (BeachBall.GetBeachState() == 'beachsafe' || ninjaRitualHerder)) {
+			Molpy.RiftJump();
 			
-			if ((!Molpy.Got('Temporal Rift')) && (BeachBall.GetBeachState() == 'beachsafe'))
-				Molpy.RiftJump();
-			break;
-			
-		case 2 : // rift to ONG
-			if (!(Molpy.Boosts['Time Lord'] && Molpy.Boosts['Time Lord'].bought && Molpy.Boosts['Time Lord'].power))
-				return;
-			if (Molpy.Got('Temporal Rift') && Molpy.Boosts['Sand'].Has(1) && (BeachBall.GetBeachState() == 'beachsafe')) // ninja click has passed, rift occuring, sand in stock
-				Molpy.RiftJump();
-			break;
+			// If Time Lord is used up and we want to jump to highest NP (and we aren't there)
+			if (BeachBall.Settings['RiftAutoClick'].status == 3 && !Molpy.Boosts['Time Lord'].power) {
+				BeachBall.NWWI();
+			}
+		}
 	}
 }
 
@@ -704,17 +794,17 @@ BeachBall.GetBeachState = function () {
 }
 
 BeachBall.Ninja = function() {
-    //Molpy.ninjad is 0 when you can't click, and stays 0 until you extend streak, when it turns to 1
+	//Molpy.ninjad is 0 when you can't click, and stays 0 until you extend streak, when it turns to 1
 	//Molpy.npbONG is 0 when you can't click, and 1 when you can click
 
 	if (Molpy.ninjad == 0) {
-		if ((BeachBall.Settings['BeachAutoClick'].status == 3) && (Molpy.Got('Temporal Rift') == 0)) {
+		if ((BeachBall.Settings['NinjaMode'].status == 1 && BeachBall.Settings['BeachAutoClick'].status > 0) && (Molpy.Got('Temporal Rift') == 0)) {
 			Molpy.ClickBeach();
 			Molpy.Notify('Ninja Ritual Auto Click', 1);
 		}
-        if (Molpy.npbONG != 0) {
-            BeachBall.incoming_ONG = 0;
-            if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 0) {
+		if (Molpy.npbONG != 0) {
+			BeachBall.incoming_ONG = 0;
+			if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 0) {
 				Molpy.ClickBeach();
 				Molpy.Notify('Ninja Auto Click', 1);
 				if (BeachBall.resetCaged == 1) {
@@ -723,22 +813,25 @@ BeachBall.Ninja = function() {
 				}
 			}
 			/*If the Caged Logicats are essentially infinite in number (thus Temporal Rift is always active)
-			 *the autoclicker needs to be paused to allow temporal rift to end to process the click, then resumed*/
+			*the autoclicker needs to be paused to allow temporal rift to end to process the click, then resumed*/
 			else if (BeachBall.Settings['BeachAutoClick'].status > 0 && Molpy.Got('Temporal Rift') == 1 && BeachBall.Settings['CagedAutoClick'].status == 1) {
 				//Turn Off Caged AutoClicker, and set variable to reset it after click.
 				BeachBall.Settings['CagedAutoClick'].status = 0;
 				BeachBall.resetCaged = 1;
 			}
-        }
+		}
 	}
-    else if (BeachBall.Time_to_ONG <= 15) {
-        if (BeachBall.incoming_ONG == 0 && BeachBall.Settings['AudioAlerts'].status > 2) {
+	/* Removed: AudioAlert
+	else if (BeachBall.Time_to_ONG <= 15) {
+			if (BeachBall.incoming_ONG == 0 && BeachBall.Settings['AudioAlerts'].status > 2) {
 			BeachBall.audio_Chime.play();
 			BeachBall.incoming_ONG = 1;
-        }  
-    }
+			}
+		}
+	*/
 }
 
+/* Removed: AudioAlert
 BeachBall.PlayRKAlert = function() {
 	//If proper mNP and hasn't yet played this mNP (can happen if refresh Rate < mNP length)
 	if (Math.floor(BeachBall.RKTimer % BeachBall.RKAlertFrequency) == 0 && BeachBall.RKPlayAudio == 1) {
@@ -750,35 +843,49 @@ BeachBall.PlayRKAlert = function() {
 		BeachBall.RKPlayAudio = 1;
 	}
 }
+*/
 
 BeachBall.RedundaKitty = function() {
 	var meRK = BeachBall.Settings['RKAutoClick'];
 	var meLC = BeachBall.Settings['LCSolver'];
-    BeachBall.RKTimer = Molpy.Redacted.toggle - Molpy.Redacted.countup;
+	var meKnight = BeachBall.Settings['KnightActions'];
+	BeachBall.RKTimer = Molpy.Redacted.toggle - Molpy.Redacted.countup;
 	//If there is an active RK
 	if (Molpy.Redacted.location > 0) {
 		//Update the title, and determine the RK level
 		document.title = "! kitten !";
 		BeachBall.RKLevel = Molpy.Redacted.location - 1;
 		
-		//If RKAutoClick is Selected
-		if (meRK.status == 2) {
-			//If it is a Logicat, Solve and Submit
-			if (Molpy.PuzzleGens["redacted"].active) {
-				BeachBall.SolveLogic("redacted");
-			}
-			//Otherwise, click the Redundakitty 
-			else {
-				Molpy.Redacted.onClick(BeachBall.RKLevel);
+		//If RKAutoClick is Selected, not a logicat, and not a knight
+		if (meRK.status == 2 && !Molpy.PuzzleGens["redacted"].active && Molpy.Redacted.drawType[0] != 'knight') {
+			//Click the Redundakitty
+			Molpy.Redacted.onClick(BeachBall.RKLevel);
+		}
+		
+		//Solve Logicats
+		else if (Molpy.PuzzleGens["redacted"].active && meLC.status == 1) {
+			BeachBall.SolveLogic("redacted");
+		}
+		
+		//Fight Knights
+		else if (Molpy.Redacted.drawType[0]=='knight' && meKnight.status > 0) {
+			if (meKnight.status == 1) {
+				Molpy.DragonKnightAttack();
+			} else if (meKnight.status == 2) {
+				Molpy.DragonKnightAttack(1);
+			} else if (meKnight.status == 3) {
+				Molpy.DragonKnightAttack(2);
+			} else if (meKnight.status == 4) {
+				// Hide the Knight at the less second
+				if (BeachBall.RKTimer <= 3) {
+					Molpy.DragonsHide(0);
+				}
 			}
 		}
+		
 		//Otherwise if Find RK is selected, find the RK
 		else if (meRK.status == 1) {
 			BeachBall.FindRK();
-		}
-		
-		else if (meLC.status == 1) {
-			BeachBall.SolveLogic("redacted");
 		}
 		
 		//If the RK is visible, then highlight it
@@ -786,6 +893,7 @@ BeachBall.RedundaKitty = function() {
 			$('#redacteditem').css("border","2px solid red");
 		}
 		
+		/* Removed: AudioAlert
 		//If RK Audio Alert Enabled, Play Alert
 		if (BeachBall.Settings['AudioAlerts'].status == 1 || BeachBall.Settings['AudioAlerts'].status == 4){
 			BeachBall.PlayRKAlert();
@@ -794,12 +902,16 @@ BeachBall.RedundaKitty = function() {
 		else if (BeachBall.Settings['AudioAlerts'].status == 2 && Molpy.Redacted.DrawType[Molpy.Redacted.DrawType.length-1] == 'hide2') {
 			BeachBall.PlayRKAlert();
 		}
+		*/
 	}
 	
 	//If no RK active, update title Timer. Reset audio alert variable.
 	else {
 		document.title = BeachBall.RKTimer;
+		
+		/* Removed: AudioAlert
 		BeachBall.RKPlayAudio = 0;
+		*/
 	}
 }
 
@@ -824,12 +936,38 @@ BeachBall.ToggleMenus = function(wantOpen) {
 	}
 }
 
+BeachBall.ClearLog = function() {
+	if (BeachBall.Settings['ClearLog'].status == 1) {
+		Molpy.ClearLog();
+	}
+}
+
+BeachBall.Pope = function() {
+	if (BeachBall.popeGrace > 0) {
+		BeachBall.popeGrace -= BeachBall.Settings['RefreshRate'].setting / 1000;
+	} else if (!Molpy.Boosts['The Pope'].power && BeachBall.Settings['ThePope'].status > 0) {
+		var decName = BeachBall.decreeNames[BeachBall.Settings['ThePope'].status - 1];
+		var decree = Molpy.PapalDecrees[decName];
+		if (decree.avail()) {
+			Molpy.SelectPapalDecree(decName);
+		}
+	}
+}
+
+BeachBall.Dragons = function() {
+	if (BeachBall.Settings['DragonQueen'].status == 1 && Molpy.Got('DQ') && (!Molpy.Got('Eggs') || Molpy.Boosts['Eggs'].Level < BeachBall.Settings['DragonQueen'].setting)) {
+		// This is the Dragon Queen button code
+		if(Molpy.Spend({Bonemeal: Molpy.EggCost()}))Molpy.Add('Eggs',1);
+	}
+}
+
 BeachBall.FavsAutoclick = {};
 
 BeachBall.ChooseAutoclick = function () {
 	var selectedFave = Molpy.selectedFave;
-	if (selectedFave == 'None') 
+	if (selectedFave == 'None') {
 		return;
+	}
 	if (Molpy.activeLayout.faves[selectedFave].boost == 0) {
 		Molpy.Notify('You need to set a favorite first.', 0);
 		return;
@@ -841,12 +979,12 @@ BeachBall.ChooseAutoclick = function () {
 		return;
 	}
 	
-	
 	// cps and click per second handling
-	var speed = prompt('How shouw it be clicked ?\nType "X cps" or "Xcps" for X click per second.\nType "X s" or "Xs" for 1 click every X second.');
+	var speed = prompt('How should it be clicked ?\nType "X cps" or "Xcps" for X click per second.\nType "X s" or "Xs" for 1 click every X second.');
 	if (speed === null) { // unasign the fav
-		if (BeachBall.FavsAutoclick[selectedFave] && BeachBall.FavsAutoclick[selectedFave].timer)
+		if (BeachBall.FavsAutoclick[selectedFave] && BeachBall.FavsAutoclick[selectedFave].timer) {
 			BeachBall.ToggleAutoclickFav(selectedFave,false); // we turn it off first
+		}
 		BeachBall.FavsAutoclick[selectedFave] = null;
 		Molpy.Notify('Favorite asignation for '+Molpy.activeLayout.faves[selectedFave].boost.name+' has been removed', 1);
 		BeachBall.SaveAutoclickFav();
@@ -866,9 +1004,8 @@ BeachBall.ChooseAutoclick = function () {
 	}
 	
 	var period = speed_el[2] == "s" ?
-		speed_el[1]*1000
-		: 1000/speed_el[1];
-	
+			speed_el[1]*1000
+			: 1000/speed_el[1];
 	
 	if (buttons.length > 1) {
 		// preparing the prompt to choose for the right favorite button
@@ -923,13 +1060,17 @@ BeachBall.ToggleAutoclickFav = function(fav,shown) {
 		me.timer = window.setInterval(BeachBall.getAutoClickFav(fav),me.period)
 	}
 	BeachBall.SaveAutoclickFav();
-	if (shown)
+	if (shown) {
 		Molpy.Notify('Autoclick Favorite '+Molpy.activeLayout.faves[fav].boost.name+' toggled : '+(me.timer ? 'activated, '+me.speed : 'disabled'), 1);
+	}
 }
 
 BeachBall.getAutoClickFav = function (fav_to_auto) {
 	return (function (_fav) {
 		return function(){
+			if (!BeachBall.enabled) {
+				return;
+			}
 			var me = BeachBall.FavsAutoclick[_fav];
 			if (me.timer) {
 				var buttons = $("#sectionFave"+me.fave+" input[type=Button]");
@@ -943,12 +1084,15 @@ BeachBall.getAutoClickFav = function (fav_to_auto) {
 BeachBall.ImplantAutoclickFavButtons = function () {
 	for (fav in BeachBall.FavsAutoclick) {
 		var me = BeachBall.FavsAutoclick[fav];
-		if (me && me.period && $("#faveHeader"+fav+" h1")) 
-			if ($("#faveHeader"+fav+" h1 .BB_autoclick").length == 0){
-				$("#faveHeader"+fav+" h1")[0].innerHTML= $("#faveHeader"+fav+" h1")[0].innerHTML +"<a class='BB_autoclick' onclick='BeachBall.ToggleAutoclickFav(\""+fav+"\",true)' "+(me.timer ? "" : "style='text-decoration:line-through' ")+">[ "+me.speed+" ]</a>";
+		if (me && me.period && $("#faveHeader"+fav+" h1")) {
+			if ($("#faveHeader"+fav+" h1 .BB_autoclick").length == 0) {
+				if ($("#faveHeader"+fav+" h1").length>0) {
+					$("#faveHeader"+fav+" h1")[0].innerHTML= $("#faveHeader"+fav+" h1")[0].innerHTML +"<a class='BB_autoclick' onclick='BeachBall.ToggleAutoclickFav(\""+fav+"\",true)' "+(me.timer ? "" : "style='text-decoration:line-through' ")+">[ "+me.speed+" ]</a>";
+				}
 			} else {
 				$("#faveHeader"+fav+" h1 .BB_autoclick").first().css('text-decoration',me.timer ? '' : 'line-through');
 			}
+		}
 	}
 }
 
@@ -979,28 +1123,30 @@ BeachBall.CheckToolFactory = function() {
 }
 
 BeachBall.LoadToolFactory = function() {
-	if (Molpy.Boosts['TF'].bought == 1) 
+	if (Molpy.Boosts['TF'].bought == 1) {
 		Molpy.LoadToolFactory(BeachBall.Settings['ToolFactory'].setting);
+	}
 }
 
 BeachBall.CreateMenu = function() {
-
 	if ((window.location.pathname == "/classic.html") && (g('sectionOptions') != null)) { // patch for option height in classic
 		g('sectionOptions').style['height'] = '236px';
 		g('sectionOptions').style['overflow-y'] = 'scroll';
-		
 	}
-	for (var i = Molpy.OptionsById.length-1; i >= 0; i--)
+	for (var i = Molpy.OptionsById.length-1; i >= 0; i--) {
 		if (EvalMaybeFunction(Molpy.OptionsById[i].visability) > 0) {
 			Molpy.OptionsById[i].breakafter = true;
 			break;
 		}
+	}
 	
 	new Molpy.Option({
 		name: 'BB.title',
 		title: '<h3 style="font-size:150%; color:red">BeachBall Settings</h3> ',		
 		breakafter : true,
-		text: function() { return '<h4 style"font-size:75%">v ' + BeachBall.version + '</div>' },
+		onchange: function() { BeachBall.enabled = !BeachBall.enabled; },
+		text: function() { return '<h4 style"font-size:75%">v ' + BeachBall.version + '</h4><b>' +
+				(BeachBall.enabled ? 'Enabled' : 'Disabled') + '</b></div>' },
 	});
 	
 	//Replace with Loop!
@@ -1026,11 +1172,9 @@ BeachBall.CreateMenu = function() {
 	BeachBall.SpawnRK = function() {
 		Molpy.redactedCountup = Molpy.redactedToggle;
 	}
-
 	BeachBall.SpawnRift = function() {
 		Molpy.GiveTempBoost('Temporal Rift', 1, 5);;
 	}
-
 	BeachBall.Temp = function() {
 		Molpy.redactedToggle = 600;
 	}
@@ -1039,18 +1183,19 @@ BeachBall.CreateMenu = function() {
 }
 
 BeachBall.DisplayDescription = function(option,type) {
-// console.log(option);
 	var me = BeachBall.Settings[option];
-	// var me = option;
-	description = me.desc[me.status];
+	var description = me.desc[me.status];
+	var title = me.title;
 	
+	// Autoclicker special action
 	if (option == 'BeachAutoClick') {
 		clearInterval(BeachBall.BeachAutoClickTimer);
 		if (me.status >= 2) {
 			BeachBall.BeachAutoClickTimer = setInterval(BeachBall.ClickBeach, 1000/me.setting);
 		}
 	}
-	var title = me.title;
+	
+	// Tool factory special actions
 	if (option == 'ToolFactory') {
 		if (Molpy.Boosts['TF'].bought == 1) {
 			title = '<a onclick="BeachBall.LoadToolFactory()">Tool Factory</a>';
@@ -1065,29 +1210,50 @@ BeachBall.DisplayDescription = function(option,type) {
 		g('BBToolFactory').innerHTML = title;
 		g(option + 'Desc').innerHTML = '<br>' + description;
 	}
-	if (type == 'desc')
+	
+	// The Pope special action
+	if (option == 'ThePope' && type == 'desc') {
+		description = BeachBall.LoadDefaultSetting(option, type)[me.status];
+	}
+	
+	if (type == 'desc') {
 		return description;
-	if (type == 'title')
+	}
+	if (type == 'title') {
 		return title;
+	}
 }
 
 BeachBall.LoadDefaultSetting = function (option, key) {
-	if (option == 'AudioAlerts') {
+	if (option == 'Meta') {
+		if (key == 'enabled') 	{return true;}
+		if (key == 'graceTime')	{return 5;}
+	}
+	/* Removed: AudioAlert
+	else if (option == 'AudioAlerts') {
 		if (key == 'title')		{return 'Audio Alerts';}
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 4;}
 		if (key == 'setting')	{return 0;}
 		if (key == 'desc')		{return ['Off', 'RK Only', 'LC Only', 'ONG Only', 'All Alerts'];}
 	}
+	*/
 	else if (option == 'BeachAutoClick') {
 		if (key == 'title')		{return 'Beach AutoClick';}
 		if (key == 'status') 	{return 1;}
-		if (key == 'maxStatus') {return 3;}
+		if (key == 'maxStatus') {return 2;}
 		if (key == 'setting')	{return 1;}
 		if (key == 'minSetting'){return 1;}
 		if (key == 'maxSetting'){return 20;}
 		if (key == 'msg')		{return 'Please enter your desired clicking rate per second (1 - 20):';}
-		if (key == 'desc')		{return ['Off', 'Keep Ninja', 'On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a>','On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a><br/>(with ninja ritual)'];}
+		if (key == 'desc')		{return ['Off', 'Click once per NP', 'On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a>'];}
+	}
+	else if (option == 'NinjaMode') {
+		if (key == 'title')		{return 'NPB Ninja Mode';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1;}
+		if (key == 'setting')	{return 0;}
+		if (key == 'desc')		{return ['Ninja Stealth<br/>Requires Beach AutoClick', 'Ninja Ritual<br/>Requires Beach AutoClick<br/>or Ninja Herder'];}
 	}
 	else if (option == 'CagedAutoClick') {
 		if (key == 'title')		{return 'Caged Logicat AutoClick';}
@@ -1101,9 +1267,8 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'status') 	{return 0;}
 		if (key == 'maxStatus') {return 1;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off', 'On'];}
+		if (key == 'desc')		{return ['Off<br/>Game bug with logicats<br/>Solver avoids bug if On', 'On'];}
 	}
-	
 	else if (option == 'MHAutoClick') {
 		if (key == 'title')		{return 'Monty Haul AutoClick';}
 		if (key == 'status') 	{return 0;}
@@ -1119,7 +1284,7 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'minSetting'){return 500;}
 		if (key == 'maxSetting'){return Molpy.NPlength;}
 		if (key == 'msg')		{return 'Please enter your desired refresh rate in milliseconds (500 - 3600):';}
-		if (key == 'desc')		{return [BeachBall.Settings[option].setting];}
+		if (key == 'desc')		{return ['<a onclick="BeachBall.SwitchSetting(\'RefreshRate\')">' + BeachBall.Settings[option].setting + ' ms</a>'];}
 	}
 	else if (option == 'RKAutoClick') {
 		if (key == 'title')		{return 'Redundakitty AutoClick';}
@@ -1127,6 +1292,13 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'maxStatus') {return 2;}
 		if (key == 'setting')	{return 0;}
 		if (key == 'desc')		{return ['Off', 'Find RK', 'On'];}
+	}
+	else if (option == 'KnightActions') {
+		if (key == 'title')		{return 'Knight AutoClick';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 4;}
+		if (key == 'setting')	{return 0;}
+		if (key == 'desc')		{return ['Off', 'Attack', 'Strength Potion', 'Breath<br/>(Placeholder)', 'Hide<br/>(Triggers at <= 3mNP)'];}
 	}
 	else if (option == 'ToolFactory') {
 		if (key == 'title')		{return 'Tool Factory';}
@@ -1141,9 +1313,50 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 	else if (option == 'RiftAutoClick') {
 		if (key == 'title')		{return 'Rift Autoclick';}
 		if (key == 'status') 	{return 0;}
-		if (key == 'maxStatus') {return 2;}
+		if (key == 'maxStatus') {return 3;}
 		if (key == 'setting')	{return 0;}
-		if (key == 'desc')		{return ['Off', 'On - Flux Cristal', 'On - ONG'];}
+		if (key == 'desc')		{return ['Off', 'On - Flux Crystal', 'On - ONG', 'On - ONG<br/>Now Where Was I?'];}
+	}
+	else if (option == 'ClearLog') {
+		if (key == 'title')		{return 'Log Pruning';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1;}
+		if (key == 'setting')	{return 0;}
+		if (key == 'desc')		{return ['Off', 'On'];}
+	}
+	else if (option == 'ThePope') {
+		if (key == 'title')		{return 'The Pope: Decree AutoSelect';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return BeachBall.decreeNames.length;}
+		if (key == 'setting')	{return 5;}
+		if (key == 'minSetting'){return 0;}
+		if (key == 'maxSetting'){return 30;}
+		if (key == 'msg')		{return 'Please enter your desired grace time for The Pope (0 - 30) seconds:';}
+		if (key == 'desc') {
+			var popeDescList = ['None<br/>Switch grace time: <a onclick="BeachBall.SwitchSetting(\'ThePope\')">' + BeachBall.Settings[option].setting + ' sec</a>'];
+			for (var decNum = 0; decNum < BeachBall.decreeNames.length; decNum++) {
+				var decree = Molpy.PapalDecrees[BeachBall.decreeNames[decNum]];
+				var mod = decree.value > 1 ? (( decree.value*Molpy.PapalBoostFactor -1)*100) : 
+							     ((1-decree.value/Molpy.PapalBoostFactor)*100);
+				var desc = decree.desc.replace(/XX/,mod.toFixed(2));
+				if (!decree.avail()) {
+					desc = '<del>' + desc + '</del>';
+				}
+				desc = (decNum+1) + "/" + BeachBall.decreeNames.length + "<br/>" + desc;
+				popeDescList.push(desc);
+			}
+			return popeDescList;
+		}
+	}
+	else if (option == 'DragonQueen') {
+		if (key == 'title')		{return 'Dragon Queen Eggs';}
+		if (key == 'status') 	{return 0;}
+		if (key == 'maxStatus') {return 1;}
+		if (key == 'setting')	{return 1;}
+		if (key == 'minSetting'){return 1;}
+		if (key == 'maxSetting'){return 100;}
+		if (key == 'msg')		{return 'How many dragon eggs should the Queen maintain? (1 - 100):';}
+		if (key == 'desc')		{return ['Off', 'Autolay: <a onclick="BeachBall.SwitchSetting(\'DragonQueen\')">' + BeachBall.Settings[option].setting + ' eggs</a>'];}
 	}
 	else {
 		Molpy.Notify(BeachBall.Settings[option] + ' setting not found. Please contact developer.', 1);
@@ -1152,9 +1365,17 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 }
 
 BeachBall.LoadSettings = function() {
-	BeachBall.AllOptions = [ 'AudioAlerts', 'BeachAutoClick', 'CagedAutoClick', 'LCSolver', 'MHAutoClick', 'RefreshRate', 'RKAutoClick', 'ToolFactory','RiftAutoClick'];
+	/* Removed AudioAlert
+	The option 'AudioAlerts' was removed from the front of BeachBall.AllOptions
+	*/
+	BeachBall.AllOptions = ['BeachAutoClick', 'NinjaMode',
+							'RKAutoClick', 'LCSolver', 'CagedAutoClick',
+							'MHAutoClick', 'ToolFactory', 'RiftAutoClick', 'ThePope',
+							'KnightActions', 'DragonQueen',
+							'RefreshRate', "ClearLog"];
 	BeachBall.AllOptionsKeys = ['title', 'status', 'maxStatus', 'setting', 'minSetting', 'maxSetting', 'msg', 'desc'];
 	BeachBall.SavedOptionsKeys = ['status', 'setting'];
+	BeachBall.SavedMetaKeys = ['enabled', 'graceTime'];
 	BeachBall.Settings = {};
 	
 	if(typeof(Storage) !== 'undefined') {
@@ -1165,6 +1386,33 @@ BeachBall.LoadSettings = function() {
 		if (typeof localStorage['BB.LCSolver.status'] == 'string') {
 			localStorage.removeItem('BB.LCSolver.status');
 		}*/
+	}
+	
+	// NinjaMode Update (v5.3.1)
+	// This is before we started storing the previous version, so we'll do a guess at the save conversion.
+	if (BeachBall.storage == 1 && localStorage['BB.BeachAutoClick.status'] == 3 && !localStorage['BB.version']) {
+		localStorage['BB.BeachAutoClick.status'] = 2;
+		localStorage['BB.NinjaMode.status'] = 1;
+	}
+	
+	// Starting 5.4.2
+	// We're now saving the last BeachBall version used.
+	// This should make new BeachBall versions capable of reading old saved settings, even if the settings change
+	if (BeachBall.storage == 1) {
+		var oldVersion = localStorage['BB.version'];
+		
+		// Do setting conversion here if required
+		
+		localStorage['BB.version'] = BeachBall.version;
+	}
+	
+	for (var i = 0; i < BeachBall.SavedMetaKeys.length; i++) {
+		var meta = BeachBall.SavedMetaKeys[i];
+		if (BeachBall.storage == 1 && localStorage['BB.'+ meta]) {
+			BeachBall[meta] = localStorage['BB.'+ meta];
+		} else {
+			BeachBall[meta] = BeachBall.LoadDefaultSetting('Meta', meta);
+		}
 	}
 
 	for (i = 0; i < BeachBall.AllOptions.length; i++) {
@@ -1180,7 +1428,7 @@ BeachBall.LoadSettings = function() {
 				BeachBall.Settings[option][key] = BeachBall.LoadDefaultSetting(option, key);
 			}
 		}
-	}	
+	}
 }
 
 BeachBall.SwitchSetting = function(option) {
@@ -1196,18 +1444,25 @@ BeachBall.SwitchSetting = function(option) {
 		}
 		me.desc = BeachBall.LoadDefaultSetting(option, 'desc');
 		BeachBall.DisplayDescription(option);
+		Molpy.RefreshOptions();
 	}
 }
 
 BeachBall.SwitchStatus = function(option) {
 	var me = BeachBall.Settings[option];
-		me.status++;
-		if (me.status > me.maxStatus) {
-			me.status = 0;
-		}
-		if (option == 'ToolFactory')
-			BeachBall.LoadToolFactory();
-		
+	me.status++;
+	if (me.status > me.maxStatus) {
+		me.status = 0;
+	}
+	if (option == 'ToolFactory') {
+		BeachBall.LoadToolFactory();
+	}
+	
+	// The Pope grace period
+	if (option == 'ThePope') {
+		BeachBall.popeGrace = me.setting;
+	}
+	
 	/*if ((option == 'RKAutoClick' && me.status == 2) || (option == 'CagedAutoClick' && me.status == 1)) {
 		BeachBall.Settings['LCSolver'].status = 1;
 		if (BeachBall.storage == 1) {
@@ -1242,13 +1497,18 @@ BeachBall.SpyRefresh = function () {
 
 //Main Program and Loop
 function BeachBallMainProgram() {
-	//Molpy.Notify('Tick', 0);
 	BeachBall.Time_to_ONG = Molpy.NPlength - Molpy.ONGelapsed/1000;
-	BeachBall.RedundaKitty();
-	BeachBall.CagedAutoClick();
-	BeachBall.Ninja();
-	BeachBall.MontyHaul();
-	BeachBall.RiftAutoClick();
+	if (BeachBall.enabled) {
+		BeachBall.Pope();
+		BeachBall.Ninja();
+		BeachBall.RedundaKitty();
+		BeachBall.CagedAutoClick();
+		BeachBall.MontyHaul();
+		BeachBall.RiftAutoClick();
+		BeachBall.Pope(); // Second run of pope. Just in case things changed due to Rift ONG.
+		BeachBall.Dragons();
+		BeachBall.ClearLog();
+	}
 	BeachBall.StartLoop();
 }
 
