@@ -1244,8 +1244,8 @@ BeachBall.LoadDefaultSetting = function (option, key) {
 		if (key == 'maxStatus') {return 2;}
 		if (key == 'setting')	{return 1;}
 		if (key == 'minSetting'){return 1;}
-		if (key == 'maxSetting'){return 20;}
-		if (key == 'msg')		{return 'Please enter your desired clicking rate per second (1 - 20):';}
+		if (key == 'maxSetting'){return 1000;}
+		if (key == 'msg')		{return 'Please enter your desired clicking rate per second (1 - 1000):';}
 		if (key == 'desc')		{return ['Off', 'Click once per NP', 'On: <a onclick="BeachBall.SwitchSetting(\'BeachAutoClick\')">' + BeachBall.Settings[option].setting + ' cps</a>'];}
 	}
 	else if (option == 'NinjaMode') {
